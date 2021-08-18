@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/widgets/bottom_navigation_bar.dart';
 
 class AlertPage extends StatefulWidget {
   const AlertPage({Key? key}) : super(key: key);
@@ -10,6 +11,8 @@ class AlertPage extends StatefulWidget {
 class _AlertPageState extends State<AlertPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      bottomNavigationBar: MarkerBottomNavigationBar(),
+    );
   }
 }
