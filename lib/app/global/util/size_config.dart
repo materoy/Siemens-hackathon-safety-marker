@@ -11,4 +11,7 @@ class SizeConfig {
 
   static double height = mediaQueryData.size.height;
   static double width = mediaQueryData.size.width;
+
+  static double safeWidth = width - mediaQueryData.viewPadding.horizontal;
+  static double safeHeight = height - mediaQueryData.viewPadding.vertical;
 }

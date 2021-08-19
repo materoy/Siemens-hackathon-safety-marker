@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
-import 'package:siemens_hackathon_safety_marker/app/modules/home/view/home_page.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 import 'package:siemens_hackathon_safety_marker/l10n/l10n.dart';
 
