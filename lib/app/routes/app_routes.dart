@@ -10,6 +10,8 @@ abstract class Routes {
   static const SETTINGS = _Paths.SETTINGS;
   static const ALERT_DETAILS = _Paths.ALERT_DETAILS;
   static const ALERT_RESPONSE = _Paths.ALERT_RESPONSE;
+  static const USERS_WELFARE = _Paths.USERS_WELFARE;
+  static const RESCUE = _Paths.RESCUE;
 }
 
 abstract class _Paths {
@@ -18,4 +20,6 @@ abstract class _Paths {
   static const SETTINGS = '/settings';
   static const ALERT_DETAILS = '/alert_details';
   static const ALERT_RESPONSE = '/alert_response';
+  static const USERS_WELFARE = '/users_wefare';
+  static const RESCUE = '/rescue';
 }

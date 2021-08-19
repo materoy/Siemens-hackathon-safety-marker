@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
+import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 
 class AlertResponsePage extends StatelessWidget {
   const AlertResponsePage({Key? key}) : super(key: key);
@@ -10,140 +9,89 @@ class AlertResponsePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              width: SizeConfig.safeWidth,
-              height: SizeConfig.safeHeight,
-              child: Stack(
-                children: List.generate(
-                    10,
-                    (index) => UserBubble(
-                          name: 'John Doe',
-                          location: 'Mining area B1',
-                        )),
+        child: SizedBox(
+          width: SizeConfig.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: SizeConfig.unitWidth * 8),
+                child: Text(
+                  "There's a landslide at mining area B7",
+                  style: Theme.of(context).textTheme.headline6!.copyWith(),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class UserBubble extends StatelessWidget {
-  UserBubble({Key? key, required this.name, this.location}) : super(key: key);
-
-  final String name;
-  final String? location;
-
-  final bool safe = Random().nextBool();
-  final double sizeForSafe = SizeConfig.unitHeight * 10;
-  final double sizeForUnsafe = SizeConfig.unitHeight * 14;
-
-  double get bottomOffset => Random()
-      .nextInt((SizeConfig.safeHeight - (safe ? sizeForSafe : sizeForUnsafe))
-          .toInt())
-      .toDouble();
-
-  double get leftOffset => Random()
-      .nextInt(
-          (SizeConfig.safeWidth - (safe ? sizeForSafe : sizeForUnsafe)).toInt())
-      .toDouble();
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: bottomOffset,
-      left: leftOffset,
-      child: GestureDetector(
-        onTap: () {
-          openUserDialog(context);
-        },
-        child: Container(
-          width: safe ? sizeForSafe : sizeForUnsafe,
-          height:
-              safe ? SizeConfig.unitHeight * 10 : SizeConfig.unitHeight * 12,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border:
-                  Border.all(color: safe ? Colors.red : Colors.green, width: 2),
-              boxShadow: const [
-                BoxShadow(blurRadius: 6, spreadRadius: 6, color: Colors.black26)
-              ]),
-          child: CircleAvatar(
-            backgroundColor: safe ? Colors.green : Colors.red,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(flex: 6),
-                Text(
-                  name,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).primaryTextTheme.bodyText1,
-                ),
-                const Spacer(),
-                Text(
-                  location ?? '',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .primaryTextTheme
-                      .bodyText2!
-                      .copyWith(fontSize: 8),
-                ),
-                const Spacer(flex: 6),
-              ],
-            ),
+              Text(
+                'Are you safe ?',
+                style: Theme.of(context).textTheme.headline5,
+                textAlign: TextAlign.center,
+              ),
+              MarkerButton(
+                text: 'YES',
+                color: Colors.green,
+                onPressed: () => Navigator.pushReplacementNamed(
+                    context, Routes.USERS_WELFARE),
+              ),
+              MarkerButton(
+                text: 'NO',
+                color: Colors.red,
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, Routes.RESCUE),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
-
-  void openUserDialog(BuildContext context) {
-    showGeneralDialog(
-      context: context,
-      barrierLabel: name,
-      barrierDismissible: true,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return UserPopupDialog(
-          offset: Offset(leftOffset, bottomOffset),
-        );
-      },
-    );
-  }
 }
 
-class UserPopupDialog extends StatelessWidget {
-  const UserPopupDialog({Key? key, required this.offset}) : super(key: key);
+class MarkerButton extends StatelessWidget {
+  const MarkerButton(
+      {Key? key,
+      required this.text,
+      required this.onPressed,
+      required this.color})
+      : super(key: key);
 
-  final Offset offset;
+  final String text;
+  final VoidCallback onPressed;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      // offset: offset,
-      child: SizedBox(
-        width: SizeConfig.unitWidth * 20,
-        height: SizeConfig.unitHeight * 10,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'name',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).primaryTextTheme.bodyText1,
-            ),
-            const Spacer(),
-            Text(
-              "location ?? ''",
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .bodyText2!
-                  .copyWith(fontSize: 8),
-            ),
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: color.withOpacity(.2), width: 6),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: color.withOpacity(.5), width: 4),
+          boxShadow: const [
+            BoxShadow(blurRadius: 10, spreadRadius: 8, color: Colors.black12)
           ],
+        ),
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            minimumSize:
+                Size(SizeConfig.unitWidth * 45, SizeConfig.unitWidth * 45),
+            primary: color,
+          ),
+          child: Text(
+            text,
+            style: Theme.of(context)
+                .primaryTextTheme
+                .headline3!
+                .copyWith(fontWeight: FontWeight.w800),
+          ),
         ),
       ),
     );

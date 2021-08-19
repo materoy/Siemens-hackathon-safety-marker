@@ -17,5 +17,7 @@ class AppPages {
     _Paths.SETTINGS: (_) => const SettingsPage(),
     _Paths.ALERT_DETAILS: (_) => const AlertDetailsPage(),
     _Paths.ALERT_RESPONSE: (_) => const AlertResponsePage(),
+    _Paths.USERS_WELFARE: (_) => const UsersWealfarePage(),
+    _Paths.RESCUE: (_) => const RescuePage(),
   };
 }
