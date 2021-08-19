@@ -8,11 +8,13 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
+  // ignore: constant_identifier_names
   static const INITIAL = Routes.HOME;
 
   static Map<String, Widget Function(BuildContext context)> routes = {
     _Paths.HOME: (_) => const HomePage(),
     _Paths.ALERT: (_) => const AlertPage(),
     _Paths.SETTINGS: (_) => const SettingsPage(),
+    _Paths.ALERT_DETAILS: (_) => const AlertDetailsPage(),
   };
 }

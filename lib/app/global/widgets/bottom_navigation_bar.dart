@@ -8,6 +8,8 @@ class MarkerBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      elevation: 10,
+      showUnselectedLabels: false,
       items: items(),
       currentIndex: currentIndex(context),
       onTap: (value) => navigateTo(context, value),
@@ -22,8 +24,8 @@ class MarkerBottomNavigationBar extends StatelessWidget {
   }
 
   static const List<String> routes = [
-    Routes.HOME,
     Routes.ALERT,
+    Routes.HOME,
     Routes.SETTINGS
   ];
 
@@ -39,9 +41,9 @@ class MarkerBottomNavigationBar extends StatelessWidget {
   List<BottomNavigationBarItem> items() {
     return [
       const BottomNavigationBarItem(
-          label: 'Home', icon: Icon(CupertinoIcons.home)),
-      const BottomNavigationBarItem(
           label: 'Alert', icon: Icon(CupertinoIcons.dot_radiowaves_left_right)),
+      const BottomNavigationBarItem(
+          label: 'Home', icon: Icon(CupertinoIcons.home)),
       const BottomNavigationBarItem(
           label: 'Settings', icon: Icon(CupertinoIcons.settings)),
     ];

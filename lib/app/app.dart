@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/home/view/home_page.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 import 'package:siemens_hackathon_safety_marker/l10n/l10n.dart';
@@ -28,8 +29,32 @@ class App extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
+      builder: (context, child) {
+        SizeConfig().initialize(context);
+        return child!;
+      },
       initialRoute: AppPages.INITIAL,
       routes: AppPages.routes,
+      onGenerateRoute: (settings) {
+        /// Sets the transition for page navigation to a
+        /// custom [FadeTransition]
+        if ([Routes.ALERT, Routes.HOME, Routes.SETTINGS]
+            .contains(settings.name)) {
+          return PageRouteBuilder<dynamic>(
+            settings: settings,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return AppPages.routes[settings.name]!(context);
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+          );
+        }
+      },
     );
   }
 }

@@ -6,10 +6,12 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const ALERT = _Paths.ALERT;
   static const SETTINGS = _Paths.SETTINGS;
+  static const ALERT_DETAILS = _Paths.ALERT_DETAILS;
 }
 
 abstract class _Paths {
   static const HOME = '/home';
   static const ALERT = '/alert';
   static const SETTINGS = '/settings';
+  static const ALERT_DETAILS = '/alert_details';
 }
