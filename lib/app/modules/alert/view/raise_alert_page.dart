@@ -19,8 +19,7 @@ class AlertPage extends StatelessWidget {
             SizedBox(height: SizeConfig.unitHeight * 4),
             AlertButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, Routes.ALERT_DETAILS, (route) => false);
+                Navigator.pushNamed(context, Routes.ALERT_DETAILS);
               },
             ),
           ],

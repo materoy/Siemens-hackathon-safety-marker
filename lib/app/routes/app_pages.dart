@@ -9,7 +9,7 @@ class AppPages {
   AppPages._();
 
   // ignore: constant_identifier_names
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.ALERT;
 
   static Map<String, Widget Function(BuildContext context)> routes = {
     _Paths.HOME: (_) => const HomePage(),
