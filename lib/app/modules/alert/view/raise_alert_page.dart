@@ -10,19 +10,31 @@ class AlertPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: const MarkerBottomNavigationBar(),
-      body: SizedBox(
-        width: SizeConfig.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Raise alert'),
-            SizedBox(height: SizeConfig.unitHeight * 4),
-            AlertButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.ALERT_DETAILS);
-              },
-            ),
-          ],
+      body: SafeArea(
+        child: SizedBox(
+          width: SizeConfig.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Spacer(),
+              Text(
+                'Raise alert',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              const Spacer(flex: 10),
+              AlertButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.ALERT_DETAILS);
+                },
+              ),
+              const Spacer(flex: 2),
+              Text(
+                'incase of a disaster press the button to allert others',
+                style: Theme.of(context).textTheme.caption,
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
       ),
     );

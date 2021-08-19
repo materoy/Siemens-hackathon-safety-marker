@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/widgets/bottom_navigation_bar.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/home/bloc/home_bloc.dart';
+import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,8 +24,19 @@ class HomeView extends StatelessWidget {
     // final l10n = context.l10n;
     return Scaffold(
       // appBar: AppBar(title: Text(l10n.counterAppBarTitle)),
-      body: Container(),
-      bottomNavigationBar: MarkerBottomNavigationBar(),
+      bottomNavigationBar: const MarkerBottomNavigationBar(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.ALERT_RESPONSE);
+              },
+              child: const Text('Respond to alert'),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -7,6 +7,7 @@ abstract class Routes {
   static const ALERT = _Paths.ALERT;
   static const SETTINGS = _Paths.SETTINGS;
   static const ALERT_DETAILS = _Paths.ALERT_DETAILS;
+  static const ALERT_RESPONSE = _Paths.ALERT_RESPONSE;
 }
 
 abstract class _Paths {
@@ -14,4 +15,5 @@ abstract class _Paths {
   static const ALERT = '/alert';
   static const SETTINGS = '/settings';
   static const ALERT_DETAILS = '/alert_details';
+  static const ALERT_RESPONSE = '/alert_response';
 }
