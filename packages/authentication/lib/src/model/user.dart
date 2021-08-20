@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
   const User(
-      {required this.uid,
+      {this.uid,
       required this.firstName,
       required this.lastName,
       required this.email,
@@ -30,12 +30,32 @@ class User extends Equatable {
     };
   }
 
-  final String uid;
+  static const empty = User(firstName: '', lastName: '', email: '', phone: '');
+
+  final String? uid;
   final String firstName;
   final String lastName;
   final String email;
   final String phone;
   final String? badgeNumber;
+
+  User copyWith({
+    String? uid,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phone,
+    String? badgeNumber,
+  }) {
+    return User(
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      badgeNumber: badgeNumber ?? this.badgeNumber,
+      uid: uid ?? this.uid,
+    );
+  }
 
   @override
   List<Object?> get props =>

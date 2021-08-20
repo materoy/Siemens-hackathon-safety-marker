@@ -5,7 +5,9 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'package:authentication/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
@@ -32,7 +34,10 @@ class App extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {
         SizeConfig().initialize(context);
-        return child!;
+        return RepositoryProvider.value(
+          value: AuthenticationRepository(),
+          child: child,
+        );
       },
       initialRoute: AppPages.INITIAL,
       routes: AppPages.routes,
