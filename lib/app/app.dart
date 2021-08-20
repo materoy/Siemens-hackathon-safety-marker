@@ -13,10 +13,12 @@ import 'package:siemens_hackathon_safety_marker/l10n/l10n.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
+  static GlobalKey appKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      key: appKey,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
         colorScheme: ColorScheme.fromSwatch(
@@ -35,6 +37,10 @@ class App extends StatelessWidget {
       initialRoute: AppPages.INITIAL,
       routes: AppPages.routes,
       onGenerateRoute: (settings) {
+        // print(settings.name);
+        // print([Routes.ALERT, Routes.HOME, Routes.SETTINGS]
+        //     .contains(settings.name));
+
         /// Sets the transition for page navigation to a
         /// custom [FadeTransition]
         if ([Routes.ALERT, Routes.HOME, Routes.SETTINGS]
