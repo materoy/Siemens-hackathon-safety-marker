@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/alert.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/home/home.dart';
+import 'package:siemens_hackathon_safety_marker/app/modules/login/login.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/settings/settings.dart';
 
 part 'app_routes.dart';
@@ -19,5 +20,6 @@ class AppPages {
     _Paths.ALERT_RESPONSE: (_) => const AlertResponsePage(),
     _Paths.USERS_WELFARE: (_) => const UsersWealfarePage(),
     _Paths.RESCUE: (_) => const RescuePage(),
+    _Paths.LOGIN: (_) => const LoginPage(),
   };
 }
