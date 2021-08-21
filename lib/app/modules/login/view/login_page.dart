@@ -1,13 +1,14 @@
 import 'package:authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/login/cubit/login_cubit.dart';
 import 'package:formz/formz.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
-
+  static Page page() => const MaterialPage<void>(child: LoginPage());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +31,8 @@ class LoginForm extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(content: Text('Login failure')));
+        } else if (state.status.isSubmissionSuccess) {
+          // context.read<AppBloc>().add(AppUserChanged());
         }
       },
       child: Align(

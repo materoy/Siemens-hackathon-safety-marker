@@ -34,8 +34,8 @@ class SignupCubit extends Cubit<SignupState> {
         ConfirmPassword.dirty(password: state.password.value, value: value);
     emit(state.copyWith(
         confirmPassword: confirmPassword,
-        status: Formz.validate(
-            [state.email, confirmPassword, state.confirmPassword])));
+        status:
+            Formz.validate([state.email, confirmPassword, state.password])));
   }
 
   Future<void> signupFormSubmitted() async {

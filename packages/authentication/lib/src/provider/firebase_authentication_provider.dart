@@ -39,27 +39,43 @@ class FirebaseAuthenticationProvider {
   @visibleForTesting
   static const userCacheKey = '__user_cache_key__';
 
-  Stream<user_model.User> user() async* {
-    final String uid = await _firebaseAuth
-        .authStateChanges()
-        .map((user) => user != null ? user.uid : '')
-        .first;
-    if (uid != '') {
-      yield* _firestore
-          .collection(USERS_COLLECTION)
-          .doc(uid)
-          .snapshots()
-          .map((snapshot) => user_model.User.fromMap(snapshot.data()!));
-    } else {
-      yield user_model.User.empty;
-    }
+  // Stream<user_model.User> user() async* {
+  //   final String uid = await _firebaseAuth
+  //       .authStateChanges()
+  //       .map((user) => user != null ? user.uid : '')
+  //       .first;
+  //   if (uid != '') {
+  //     yield* _firestore
+  //         .collection(USERS_COLLECTION)
+  //         .doc(uid)
+  //         .snapshots()
+  //         .map((snapshot) => user_model.User.fromMap(snapshot.data()!));
+  //   } else {
+  //     yield user_model.User.empty;
+  //   }
+  // }
+
+  Stream<user_model.User> get user {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      final user = firebaseUser == null
+          ? user_model.User.empty
+          : firebaseUser.toUserModel;
+      _cache.write<user_model.User>(key: userCacheKey, value: user);
+      return user;
+    });
   }
 
-  /// Returns current user stored in memory
   user_model.User get currentUser {
     return _cache.read<user_model.User>(key: userCacheKey) ??
         user_model.User.empty;
   }
+
+  /// Returns current user stored in memory
+  // user_model.User get currentUser {
+  //   return _firebaseAuth.currentUser.toUserModel;
+  //   // return _cache.read<user_model.User>(key: userCacheKey) ??
+  //   // user_model.User.empty;
+  // }
 
   Future<User?> signup(String email, String password) async {
     try {
@@ -85,7 +101,10 @@ class FirebaseAuthenticationProvider {
 
   Future<void> addUserToFirestore(user_model.User user) async {
     try {
-      _firestore.collection(USERS_COLLECTION).doc(user.uid).set(user.toMap());
+      await _firestore
+          .collection(USERS_COLLECTION)
+          .doc(user.uid)
+          .set(user.toMap());
     } catch (exception) {
       throw AddUserToFirebaseFailed();
     }
@@ -113,4 +132,14 @@ class FirebaseAuthenticationProvider {
       throw LogoutFailed();
     }
   }
+}
+
+extension on User? {
+  user_model.User get toUserModel => this != null
+      ? user_model.User(
+          firstName: this?.displayName ?? '',
+          lastName: '',
+          email: this!.email!,
+          phone: this!.phoneNumber ?? '')
+      : user_model.User.empty;
 }

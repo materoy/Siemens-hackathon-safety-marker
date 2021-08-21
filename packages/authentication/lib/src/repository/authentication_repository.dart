@@ -11,9 +11,10 @@ class AuthenticationRepository {
             firebaseAuth: firebaseAuth, firestore: firestore);
   final FirebaseAuthenticationProvider _firebaseAuthProvider;
 
-  Stream<user_model.User> user() async* {
-    yield* _firebaseAuthProvider.user();
-  }
+  // Stream<user_model.User> user() async* {
+  //   yield* _firebaseAuthProvider.user();
+  // }
+  Stream<user_model.User> get user => _firebaseAuthProvider.user;
 
   /// Returns current user stored in memory
   user_model.User get currentUser => _firebaseAuthProvider.currentUser;
