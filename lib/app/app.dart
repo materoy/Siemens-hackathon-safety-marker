@@ -41,60 +41,63 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
-        colorScheme: ColorScheme.fromSwatch(
-          accentColor: const Color(0xFF13B9FF),
-        ),
-      ),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      builder: (context, child) {
-        SizeConfig().initialize(context);
-        return RepositoryProvider.value(
-          value: AuthenticationRepository(),
-          child: child,
-        );
-      },
-      initialRoute:
-          context.read<AppBloc>().state.status == AppStatus.authenticated
+    return BlocBuilder<AppBloc, AppState>(
+      builder: (context, state) {
+        return MaterialApp(
+          theme: ThemeData(
+            appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
+            colorScheme: ColorScheme.fromSwatch(
+              accentColor: const Color(0xFF13B9FF),
+            ),
+          ),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          builder: (context, child) {
+            SizeConfig().initialize(context);
+            return RepositoryProvider.value(
+              value: AuthenticationRepository(),
+              child: child,
+            );
+          },
+          initialRoute: state.status == AppStatus.authenticated
               ? AppPages.INITIAL
               : Routes.LOGIN,
-      routes: AppPages.routes,
-      // home: FlowBuilder<AppStatus>(
-      //   onGeneratePages: (AppStatus state, pages) {
-      //     switch (state) {
-      //       case AppStatus.authenticated:
-      //         return [const MaterialPage<void>(child: HomePage())];
+          routes: AppPages.routes,
+          // home: FlowBuilder<AppStatus>(
+          //   onGeneratePages: (AppStatus state, pages) {
+          //     switch (state) {
+          //       case AppStatus.authenticated:
+          //         return [const MaterialPage<void>(child: HomePage())];
 
-      //       case AppStatus.unauthenticated:
-      //         return [const MaterialPage<void>(child: LoginPage())];
-      //     }
-      //   },
-      // ),
-      onGenerateRoute: (settings) {
-        /// Sets the transition for page navigation to a
-        /// custom [FadeTransition]
-        if ([Routes.ALERT, Routes.HOME, Routes.SETTINGS]
-            .contains(settings.name)) {
-          return PageRouteBuilder<dynamic>(
-            settings: settings,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return AppPages.routes[settings.name]!(context);
-            },
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
+          //       case AppStatus.unauthenticated:
+          //         return [const MaterialPage<void>(child: LoginPage())];
+          //     }
+          //   },
+          // ),
+          onGenerateRoute: (settings) {
+            /// Sets the transition for page navigation to a
+            /// custom [FadeTransition]
+            if ([Routes.ALERT, Routes.HOME, Routes.SETTINGS]
+                .contains(settings.name)) {
+              return PageRouteBuilder<dynamic>(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return AppPages.routes[settings.name]!(context);
+                },
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
               );
-            },
-          );
-        }
+            }
+          },
+        );
       },
     );
   }
