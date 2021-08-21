@@ -6,7 +6,6 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:authentication/authentication.dart';
-import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -66,17 +65,6 @@ class AppView extends StatelessWidget {
               ? AppPages.INITIAL
               : Routes.LOGIN,
           routes: AppPages.routes,
-          // home: FlowBuilder<AppStatus>(
-          //   onGeneratePages: (AppStatus state, pages) {
-          //     switch (state) {
-          //       case AppStatus.authenticated:
-          //         return [const MaterialPage<void>(child: HomePage())];
-
-          //       case AppStatus.unauthenticated:
-          //         return [const MaterialPage<void>(child: LoginPage())];
-          //     }
-          //   },
-          // ),
           onGenerateRoute: (settings) {
             /// Sets the transition for page navigation to a
             /// custom [FadeTransition]
