@@ -57,11 +57,23 @@ class FirebaseAuthenticationProvider {
 
   Stream<user_model.User> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final user = firebaseUser == null
+      var userFromFirebase = firebaseUser == null
           ? user_model.User.empty
           : firebaseUser.toUserModel;
-      _cache.write<user_model.User>(key: userCacheKey, value: user);
-      return user;
+      if (firebaseUser != null) {
+        _firestore
+            .collection(USERS_COLLECTION)
+            .doc(firebaseUser.uid)
+            .get()
+            .then((value) {
+          user_model.User user = user_model.User.fromMap(value.data()!);
+          _cache.write<user_model.User>(key: userCacheKey, value: user);
+          userFromFirebase = user;
+          return user;
+        });
+      }
+
+      return userFromFirebase;
     });
   }
 

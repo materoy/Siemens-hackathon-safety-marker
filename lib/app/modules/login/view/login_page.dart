@@ -2,6 +2,7 @@ import 'package:authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/global.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/login/cubit/login_cubit.dart';
 import 'package:formz/formz.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
@@ -38,18 +39,22 @@ class LoginForm extends StatelessWidget {
       child: Align(
         alignment: const Alignment(0, -1 / 3),
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 16),
-              const _EmailInput(),
-              const SizedBox(height: 8),
-              _PasswordInput(),
-              const SizedBox(height: 8),
-              _LoginButton(),
-              const SizedBox(height: 8),
-              _SignUpButton(),
-            ],
+          child: Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: SizeConfig.unitWidth * 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 16),
+                const _EmailInput(),
+                const SizedBox(height: 8),
+                _PasswordInput(),
+                const SizedBox(height: 8),
+                _LoginButton(),
+                const SizedBox(height: 8),
+                _SignUpButton(),
+              ],
+            ),
           ),
         ),
       ),

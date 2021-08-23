@@ -1,3 +1,4 @@
+import 'package:authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/widgets/bottom_navigation_bar.dart';
@@ -35,7 +36,7 @@ class HomeView extends StatelessWidget {
                 Navigator.pushNamed(context, Routes.ALERT_RESPONSE);
               },
               child: const Text('Respond to alert'),
-            )
+            ),
           ],
         ),
       ),
