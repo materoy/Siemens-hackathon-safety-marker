@@ -14,6 +14,8 @@ import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 import 'package:siemens_hackathon_safety_marker/l10n/l10n.dart';
 
+import 'package:siemens_hackathon_safety_marker/app/modules/alert/alert.dart';
+
 class App extends StatelessWidget {
   App({Key? key, AuthenticationRepository? authenticationRepository})
       : _authenticationRepository =
@@ -25,13 +27,19 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: _authenticationRepository,
-      child: BlocProvider(
-        create: (_) =>
-            AppBloc(authenticationRepository: _authenticationRepository),
-        child: const AppView(),
-      ),
-    );
+        value: _authenticationRepository,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) =>
+                  AppBloc(authenticationRepository: _authenticationRepository),
+            ),
+            BlocProvider(
+              create: (_) => AlertBloc(AlertRepository()),
+            ),
+          ],
+          child: const AppView(),
+        ));
   }
 }
 

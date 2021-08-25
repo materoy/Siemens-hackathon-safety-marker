@@ -7,6 +7,7 @@ class AlertRepository {
 
   final FirebaseFirestore _firestore;
 
+  // ignore: constant_identifier_names
   static const ALERTS_COLLECTION = 'alerts';
 
   /// Creates an instance of a new alert in the database
@@ -16,6 +17,13 @@ class AlertRepository {
         await _firestore.collection(ALERTS_COLLECTION).add(alert.toMap());
 
     return documentReference.id;
+  }
+
+  Future<void> updateAlertDetails(Alert alert) async {
+    await _firestore
+        .collection(ALERTS_COLLECTION)
+        .doc(alert.alertId)
+        .update(alert.toMap());
   }
 
   Stream<List<Alert>> alertsStream() async* {
