@@ -18,6 +18,7 @@ class CurrentAlertState extends AlertState {
   CurrentAlertState copyWith(Alert newAlert) {
     return CurrentAlertState(Alert(
         time: alert.time,
+        creatorId: alert.creatorId,
         alertId: newAlert.alertId ?? alert.alertId,
         current: newAlert.current,
         description: newAlert.description ?? alert.description,

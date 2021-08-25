@@ -26,6 +26,14 @@ class AlertRepository {
         .update(alert.toMap());
   }
 
+  /// Sets the alert current value to false
+  Future<void> disableAlert(Alert alert) async {
+    await _firestore
+        .collection(ALERTS_COLLECTION)
+        .doc(alert.alertId)
+        .update(alert.copyWith(current: false).toMap());
+  }
+
   Stream<List<Alert>> alertsStream() async* {
     yield* _firestore.collection(ALERTS_COLLECTION).snapshots().map((event) {
       return event.docs

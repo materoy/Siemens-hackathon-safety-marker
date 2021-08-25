@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 class Alert extends Equatable {
   const Alert(
       {this.alertId,
+      required this.creatorId,
       this.title,
       this.type,
       this.description,
@@ -12,6 +13,7 @@ class Alert extends Equatable {
   factory Alert.fromMap(Map<String, dynamic> alertMap) {
     return Alert(
       alertId: alertMap['alertId'] as String?,
+      creatorId: alertMap['creatorId'] as String,
       time: alertMap['time'] as DateTime,
       current: alertMap['current'] as bool,
       description: alertMap['description'] as String?,
@@ -23,6 +25,7 @@ class Alert extends Equatable {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'alertId': alertId,
+      'creatorId': creatorId,
       'title': title,
       'type': type,
       'description': description,
@@ -32,6 +35,7 @@ class Alert extends Equatable {
   }
 
   final String? alertId;
+  final String creatorId;
   final String? title;
   final String? type;
   final String? description;
@@ -40,6 +44,7 @@ class Alert extends Equatable {
 
   static Alert empty = Alert(
       time: DateTime.now(),
+      creatorId: '',
       alertId: '',
       current: false,
       description: '',
@@ -47,7 +52,8 @@ class Alert extends Equatable {
       type: '');
 
   @override
-  List<Object?> get props => [alertId, time, current, description, title, type];
+  List<Object?> get props =>
+      [alertId, time, creatorId, current, description, title, type];
 
   Alert copyWith({
     final String? alertId,
@@ -60,6 +66,7 @@ class Alert extends Equatable {
     return Alert(
       time: time ?? this.time,
       alertId: alertId ?? this.alertId,
+      creatorId: creatorId,
       current: current ?? this.current,
       description: description ?? this.description,
       title: title ?? this.title,

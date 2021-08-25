@@ -11,10 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
+import 'package:siemens_hackathon_safety_marker/app/modules/safety/safety.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 import 'package:siemens_hackathon_safety_marker/l10n/l10n.dart';
-
-import 'package:siemens_hackathon_safety_marker/app/modules/alert/alert.dart';
 
 class App extends StatelessWidget {
   App({Key? key, AuthenticationRepository? authenticationRepository})
@@ -31,11 +30,11 @@ class App extends StatelessWidget {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (_) =>
+              create: (context) =>
                   AppBloc(authenticationRepository: _authenticationRepository),
             ),
             BlocProvider(
-              create: (_) => AlertBloc(AlertRepository()),
+              create: (context) => SafetyBloc(),
             ),
           ],
           child: const AppView(),
