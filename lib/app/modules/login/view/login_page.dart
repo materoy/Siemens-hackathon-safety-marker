@@ -1,7 +1,6 @@
 import 'package:authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/global.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/login/cubit/login_cubit.dart';
 import 'package:formz/formz.dart';

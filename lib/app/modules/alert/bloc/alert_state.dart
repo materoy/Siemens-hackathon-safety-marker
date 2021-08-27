@@ -20,7 +20,7 @@ class CurrentAlertState extends AlertState {
         time: alert.time,
         creatorId: alert.creatorId,
         alertId: newAlert.alertId ?? alert.alertId,
-        current: newAlert.current,
+        active: newAlert.active,
         description: newAlert.description ?? alert.description,
         title: newAlert.title ?? alert.title,
         type: newAlert.type ?? alert.type));

@@ -31,7 +31,7 @@ class AlertRepository {
     await _firestore
         .collection(ALERTS_COLLECTION)
         .doc(alert.alertId)
-        .update(alert.copyWith(current: false).toMap());
+        .update(alert.copyWith(active: false).toMap());
   }
 
   Stream<List<Alert>> alertsStream() async* {
