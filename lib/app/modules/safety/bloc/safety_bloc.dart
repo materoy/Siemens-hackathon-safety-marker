@@ -15,9 +15,11 @@ class SafetyBloc extends Bloc<SafetyEvent, SafetyState> {
         _safetyRepository.activeAlertsStream.listen(_onalertStateChanged);
   }
   final SafetyRepository _safetyRepository = SafetyRepository();
-  late final StreamSubscription<Alert> _alertSubscription;
+  late final StreamSubscription<Alert?> _alertSubscription;
 
-  void _onalertStateChanged(Alert alert) => add(ActivateSafetyEvent(alert));
+  void _onalertStateChanged(Alert? alert) => alert != null
+      ? add(ActivateSafetyEvent(alert))
+      : add(DeactivateSafetyEvent(Alert.empty));
 
   @override
   Stream<SafetyState> mapEventToState(

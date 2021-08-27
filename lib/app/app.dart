@@ -72,6 +72,7 @@ class AppView extends StatelessWidget {
               buildWhen: (previous, current) =>
                   previous.alert.alertId != current.alert.alertId,
               builder: (context, state) {
+                log(state.toString());
                 if (state is ActiveSafetyAlertState) {
                   return const AlertResponsePage();
                 } else {
