@@ -12,14 +12,11 @@ main() async {
       email: 'bob@somedomain.com',
       displayName: 'Bob',
     );
-    FirebaseAuthenticationProvider _authProvider =
-        FirebaseAuthenticationProvider(
-            firebaseAuth: MockFirebaseAuth(),
-            firestore: FakeFirebaseFirestore());
+    FirebaseAuthenticationProvider _authProvider = FirebaseAuthenticationProvider(
+        firebaseAuth: MockFirebaseAuth(), firestore: FakeFirebaseFirestore());
     test('signs up successfully', () async {
-      final actual =
-          await _authProvider.signup('bob@somedomain.com', 'password');
-      // expect(actual, mockUser);
+      final actual = await _authProvider.signup('bob@somedomain.com', 'password');
+      expect(actual, mockUser);
     });
   });
 }
