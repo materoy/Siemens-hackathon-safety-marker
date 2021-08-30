@@ -31,7 +31,7 @@ class _AlertDetailsPageState extends State<AlertDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    log('id is : ${context.read<AlertBloc>().state.alert.alertId}');
+    log('Transitioned state: ${context.read<AlertBloc>().state == CurrentAlertState}');
     return BlocListener<AlertBloc, AlertState>(
       listener: (context, state) {},
       child: Scaffold(
