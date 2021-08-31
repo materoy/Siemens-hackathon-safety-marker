@@ -13,7 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
-import 'package:siemens_hackathon_safety_marker/app/modules/alert/alert.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/safety/safety.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 import 'package:siemens_hackathon_safety_marker/l10n/l10n.dart';
@@ -66,20 +65,7 @@ class AppView extends StatelessWidget {
           supportedLocales: AppLocalizations.supportedLocales,
           builder: (context, child) {
             SizeConfig().initialize(context);
-            return BlocBuilder<SafetyBloc, SafetyState>(
-              /// Listens for changes in alerts stream
-              /// Navigates to alert response page incase of an active alert
-              buildWhen: (previous, current) =>
-                  previous.alert.alertId != current.alert.alertId,
-              builder: (context, state) {
-                log(state.toString());
-                if (state is ActiveSafetyAlertState) {
-                  return const AlertResponsePage();
-                } else {
-                  return child!;
-                }
-              },
-            );
+            return child!;
           },
           key: Key('${state.status}_app_key'),
           initialRoute: state.status == AppStatus.authenticated

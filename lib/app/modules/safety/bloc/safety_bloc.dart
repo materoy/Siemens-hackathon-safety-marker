@@ -26,7 +26,6 @@ class SafetyBloc extends Bloc<SafetyEvent, SafetyState> {
     SafetyEvent event,
   ) async* {
     if (event is ActivateSafetyEvent) {
-      log('Active event');
       yield ActiveSafetyAlertState(event.alert);
     } else if (event is DeactivateSafetyEvent) {
       yield InactiveSafetyAlertState();

@@ -8,20 +8,33 @@ import 'package:siemens_hackathon_safety_marker/app/global/widgets/bottom_naviga
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/bloc/alert_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/model/alert.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/repository/alert_repository.dart';
+import 'package:siemens_hackathon_safety_marker/app/modules/safety/safety.dart';
+import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 
 class AlertPage extends StatelessWidget {
   const AlertPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: AlertRepository(),
-      child: Builder(builder: (context) {
-        return BlocProvider<AlertBloc>(
-          create: (_) => AlertBloc(context.read<AlertRepository>()),
-          child: const AlertView(),
-        );
-      }),
+    /// Listens for an active alert event
+    /// Navigates to safety page incase of one
+    return BlocListener<SafetyBloc, SafetyState>(
+      listenWhen: (previous, current) =>
+          previous.alert.alertId != current.alert.alertId,
+      listener: (context, state) {
+        if (state is ActiveSafetyAlertState) {
+          Navigator.pushNamed(context, Routes.ALERT_RESPONSE);
+        }
+      },
+      child: RepositoryProvider.value(
+        value: AlertRepository(),
+        child: Builder(builder: (context) {
+          return BlocProvider<AlertBloc>(
+            create: (_) => AlertBloc(context.read<AlertRepository>()),
+            child: const AlertView(),
+          );
+        }),
+      ),
     );
   }
 }
@@ -33,42 +46,34 @@ class AlertView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: BlocProvider.of<AlertBloc>(context),
-      child: BlocListener<AlertBloc, AlertState>(
-        listener: (context, state) {
-          if (state is CurrentAlertState) {
-            // Navigator.pushNamed(context, Routes.ALERT_DETAILS);
-            log(state.alert.alertId ?? 'No ID');
-          }
-        },
-        child: Scaffold(
-          bottomNavigationBar: const MarkerBottomNavigationBar(),
-          body: SafeArea(
-            child: SizedBox(
-              width: SizeConfig.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Spacer(),
-                  Text(
-                    'Raise alert',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  const Spacer(flex: 10),
-                  AlertButton(
-                    onPressed: () {
-                      context.read<AlertBloc>().add(CreateAlertEvent(Alert(
-                          time: DateTime.now(),
-                          creatorId: context.read<AppBloc>().state.user.uid!)));
-                    },
-                  ),
-                  const Spacer(flex: 2),
-                  Text(
-                    'incase of a disaster press the button to allert others',
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                  const Spacer(),
-                ],
-              ),
+      child: Scaffold(
+        bottomNavigationBar: const MarkerBottomNavigationBar(),
+        body: SafeArea(
+          child: SizedBox(
+            width: SizeConfig.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Spacer(),
+                Text(
+                  'Raise alert',
+                  style: Theme.of(context).textTheme.headline3,
+                ),
+                const Spacer(flex: 10),
+                AlertButton(
+                  onPressed: () {
+                    context.read<AlertBloc>().add(CreateAlertEvent(Alert(
+                        time: DateTime.now(),
+                        creatorId: context.read<AppBloc>().state.user.uid!)));
+                  },
+                ),
+                const Spacer(flex: 2),
+                Text(
+                  'incase of a disaster press the button to allert others',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                const Spacer(),
+              ],
             ),
           ),
         ),
