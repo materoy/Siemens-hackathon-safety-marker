@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class User extends Equatable {
   const User(
@@ -7,7 +9,8 @@ class User extends Equatable {
       required this.lastName,
       required this.email,
       required this.phone,
-      this.badgeNumber});
+      this.badgeNumber,
+      this.latLng});
 
   factory User.fromMap(Map<String, dynamic> userMap) {
     return User(
@@ -16,7 +19,8 @@ class User extends Equatable {
         lastName: userMap['lastName'],
         email: userMap['email'],
         phone: userMap['phone'],
-        badgeNumber: userMap['badgeNumber']);
+        badgeNumber: userMap['badgeNumber'],
+        latLng: (userMap['latLng'] as GeoPoint?).toLatLng());
   }
 
   Map<String, dynamic> toMap() {
@@ -27,6 +31,7 @@ class User extends Equatable {
       'email': email,
       'phone': phone,
       'badgeNumber': badgeNumber,
+      'latLng': latLng!.toGeoPoint(),
     };
   }
 
@@ -38,6 +43,7 @@ class User extends Equatable {
   final String email;
   final String phone;
   final String? badgeNumber;
+  final LatLng? latLng;
 
   User copyWith({
     String? uid,
@@ -46,6 +52,7 @@ class User extends Equatable {
     String? email,
     String? phone,
     String? badgeNumber,
+    LatLng? latLng,
   }) {
     return User(
       firstName: firstName ?? this.firstName,
@@ -54,10 +61,21 @@ class User extends Equatable {
       phone: phone ?? this.phone,
       badgeNumber: badgeNumber ?? this.badgeNumber,
       uid: uid ?? this.uid,
+      latLng: latLng ?? this.latLng,
     );
   }
 
   @override
   List<Object?> get props =>
-      [uid, firstName, lastName, email, phone, badgeNumber];
+      [uid, firstName, lastName, email, phone, badgeNumber, latLng];
+}
+
+extension on GeoPoint? {
+  LatLng? toLatLng() =>
+      this != null ? LatLng(this!.latitude, this!.longitude) : null;
+}
+
+extension on LatLng? {
+  GeoPoint? toGeoPoint() =>
+      this != null ? GeoPoint(this!.latitude, this!.longitude) : null;
 }
