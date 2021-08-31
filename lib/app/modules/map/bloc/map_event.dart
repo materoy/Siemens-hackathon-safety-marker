@@ -6,3 +6,11 @@ abstract class MapEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class MapCreatedEvent extends MapEvent {}
+
+class GoToCurrentLocationEvent extends MapEvent {}
+
+class GoToUserLocationEvent extends MapEvent {}
+
+class ActivateLiveShareLocationEvent extends MapEvent {}

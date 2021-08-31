@@ -93,9 +93,7 @@ class _AlertDetailsPageState extends State<AlertDetailsPage> {
                     color: const Color(0xFF31EE7C),
                   ),
                   sendButton(
-                      onPressed: () {
-                        log('id is : ${context.read<AlertBloc>().state.alert.alertId}');
-                      },
+                      onPressed: () {},
                       child: const Text(
                         'Just alert',
                       ),
