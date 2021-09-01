@@ -59,11 +59,12 @@ class MapRepository {
       {required LatLng position, required String uid}) async {
     try {
       await _firestore
-          .collection('USERS')
+          .collection('users')
           .doc(uid)
           .update({'latLng': GeoPoint(position.latitude, position.longitude)});
       log('Updating user location');
     } catch (e) {
+      log(e.toString());
       throw UpdateLocationFailed();
     }
   }

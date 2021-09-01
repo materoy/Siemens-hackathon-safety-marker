@@ -33,8 +33,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     } else if (event is TrackUsersEvent) {
       yield* _mapTrackUserEventToState();
     } else if (event is BroadcastLocationEvent) {
-      _positionStream =
-          Geolocator.getPositionStream().listen((newPosition) async {
+      _positionStream = Geolocator.getPositionStream(
+              intervalDuration: const Duration(seconds: 10))
+          .listen((newPosition) async {
         await _repository.updateUserPosition(
             position: LatLng(newPosition.latitude, newPosition.longitude),
             uid: _authenticationRepository.currentUser.uid!);
@@ -48,9 +49,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Stream<MapState> _mapTrackUserEventToState() async* {
-    log('called');
     yield* _repository.usersStream.map((users) {
-      log('Change location stream');
       return TrackUserState(
         currentPosition: state.currentPosition,
         markers: List.generate(users.length, (index) {
@@ -68,8 +67,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void onMapCreated(GoogleMapController gmContoller) {
-    add(TrackUsersEvent());
     add(BroadcastLocationEvent());
+    add(TrackUsersEvent());
+    Future.delayed(const Duration(seconds: 1), () {});
   }
 
   @override
