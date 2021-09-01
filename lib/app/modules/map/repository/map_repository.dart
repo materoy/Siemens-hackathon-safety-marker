@@ -24,6 +24,8 @@ class MapRepository {
       permission = await Geolocator.requestPermission();
 
       if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+
         return Future.error('Location permissions are denied');
       }
     }
