@@ -108,6 +108,7 @@ class FirebaseAuthenticationProvider {
           .doc(user.uid)
           .set(user.toMap());
     } catch (exception) {
+      log(exception.toString());
       throw AddUserToFirebaseFailed();
     }
   }

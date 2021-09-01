@@ -1,3 +1,4 @@
+import 'package:authentication/authentication.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +11,7 @@ class MapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: MapBloc(),
+      value: MapBloc(context.read<AuthenticationRepository>()),
       child: const MapView(),
     );
   }
@@ -27,9 +28,12 @@ class MapView extends StatelessWidget {
         builder: (context, state) {
           if (state is! MapInitial) {
             return GoogleMap(
-                mapType: MapType.satellite,
-                initialCameraPosition:
-                    CameraPosition(target: state.currentPosition!, zoom: 18));
+              mapType: MapType.satellite,
+              initialCameraPosition:
+                  CameraPosition(target: state.currentPosition!, zoom: 18),
+              markers: state.markers ?? {},
+              onMapCreated: context.read<MapBloc>().onMapCreated,
+            );
           }
           return const Center(
             child: CupertinoActivityIndicator(),

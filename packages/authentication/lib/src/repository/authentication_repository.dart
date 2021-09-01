@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:authentication/src/provider/firebase_authentication_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,11 +29,16 @@ class AuthenticationRepository {
   }
 
   Future<user_model.User?> signup(user_model.User user, String password) async {
-    User? userLogin = await _firebaseAuthProvider.signup(user.email, password);
-    if (userLogin != null) {
-      final userWithId = user.copyWith(uid: userLogin.uid);
-      await _firebaseAuthProvider.addUserToFirestore(userWithId);
-      return userWithId;
+    try {
+      User? userLogin =
+          await _firebaseAuthProvider.signup(user.email, password);
+      if (userLogin != null) {
+        final userWithId = user.copyWith(uid: userLogin.uid);
+        await _firebaseAuthProvider.addUserToFirestore(userWithId);
+        return userWithId;
+      }
+    } catch (e) {
+      log(e.toString());
     }
   }
 

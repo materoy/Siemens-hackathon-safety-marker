@@ -31,7 +31,7 @@ class User extends Equatable {
       'email': email,
       'phone': phone,
       'badgeNumber': badgeNumber,
-      'latLng': latLng!.toGeoPoint(),
+      'latLng': latLng.toGeoPoint(),
     };
   }
 
