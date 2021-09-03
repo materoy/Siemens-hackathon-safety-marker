@@ -19,7 +19,7 @@ class MarkerBottomNavigationBar extends StatelessWidget {
   void navigateTo(BuildContext context, int index) {
     if (ModalRoute.of(context)!.settings.name != routes[index]) {
       // Navigator.pushNamed(context, routes[index]);
-      Navigator.pushReplacementNamed(context, routes[index]);
+      Navigator.pushNamed(context, routes[index]);
     }
   }
 

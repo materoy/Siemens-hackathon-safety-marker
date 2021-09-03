@@ -5,12 +5,15 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'dart:developer';
+
 import 'package:authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
+import 'package:siemens_hackathon_safety_marker/app/modules/safety/safety.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 import 'package:siemens_hackathon_safety_marker/l10n/l10n.dart';
 
@@ -25,13 +28,19 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: _authenticationRepository,
-      child: BlocProvider(
-        create: (_) =>
-            AppBloc(authenticationRepository: _authenticationRepository),
-        child: const AppView(),
-      ),
-    );
+        value: _authenticationRepository,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) =>
+                  AppBloc(authenticationRepository: _authenticationRepository),
+            ),
+            BlocProvider(
+              create: (context) => SafetyBloc(),
+            ),
+          ],
+          child: const AppView(),
+        ));
   }
 }
 

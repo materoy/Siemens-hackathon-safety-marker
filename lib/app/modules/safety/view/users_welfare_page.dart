@@ -3,34 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
 
-class UsersWealfarePage extends StatelessWidget {
-  const UsersWealfarePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              width: SizeConfig.safeWidth,
-              height: SizeConfig.safeHeight,
-              child: Stack(
-                children: List.generate(
-                    10,
-                    (index) => UserBubble(
-                          name: 'John Doe',
-                          location: 'Mining area B1',
-                        )),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class UserBubble extends StatelessWidget {
   UserBubble({Key? key, required this.name, this.location}) : super(key: key);
 

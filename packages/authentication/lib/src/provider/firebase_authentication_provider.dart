@@ -60,18 +60,8 @@ class FirebaseAuthenticationProvider {
       var userFromFirebase = firebaseUser == null
           ? user_model.User.empty
           : firebaseUser.toUserModel;
-      if (firebaseUser != null) {
-        _firestore
-            .collection(USERS_COLLECTION)
-            .doc(firebaseUser.uid)
-            .get()
-            .then((value) {
-          user_model.User user = user_model.User.fromMap(value.data()!);
-          _cache.write<user_model.User>(key: userCacheKey, value: user);
-          userFromFirebase = user;
-          return user;
-        });
-      }
+      _cache.write<user_model.User>(
+          key: userCacheKey, value: firebaseUser.toUserModel);
 
       return userFromFirebase;
     });
@@ -118,6 +108,7 @@ class FirebaseAuthenticationProvider {
           .doc(user.uid)
           .set(user.toMap());
     } catch (exception) {
+      log(exception.toString());
       throw AddUserToFirebaseFailed();
     }
   }
@@ -149,6 +140,7 @@ class FirebaseAuthenticationProvider {
 extension on User? {
   user_model.User get toUserModel => this != null
       ? user_model.User(
+          uid: this?.uid,
           firstName: this?.displayName ?? '',
           lastName: '',
           email: this!.email!,

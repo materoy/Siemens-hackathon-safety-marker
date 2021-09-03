@@ -31,8 +31,8 @@ class AlertResponsePage extends StatelessWidget {
               MarkerButton(
                 text: 'YES',
                 color: Colors.green,
-                onPressed: () => Navigator.pushReplacementNamed(
-                    context, Routes.USERS_WELFARE),
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, Routes.MAP),
               ),
               MarkerButton(
                 text: 'NO',
