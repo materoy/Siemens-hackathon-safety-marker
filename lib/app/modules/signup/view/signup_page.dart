@@ -75,17 +75,34 @@ class _ProfileImage extends StatelessWidget {
     return BlocBuilder<SignupCubit, SignupState>(
       buildWhen: (previous, current) => current.image != null,
       builder: (context, state) {
-        return CircleAvatar(
-          radius: SizeConfig.unitHeight * 7,
-          backgroundColor: Colors.grey,
+        final size = SizeConfig.unitHeight * 20;
+        return Container(
+          width: size,
+          height: size,
+          clipBehavior: Clip.hardEdge,
+          decoration: const BoxDecoration(
+            color: Colors.grey,
+            shape: BoxShape.circle,
+          ),
           child: Stack(
             children: [
-              if (state.image != null) Image.memory(state.image!),
-              IconButton(
-                icon: const Icon(CupertinoIcons.photo),
-                onPressed: () async {
-                  await _pickImage(context);
-                },
+              if (state.image != null)
+                Center(
+                    child: SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Image.memory(state.image!, fit: BoxFit.cover))),
+              Align(
+                alignment: state.image != null
+                    ? Alignment.bottomRight
+                    : Alignment.center,
+                child: IconButton(
+                  icon: const Icon(CupertinoIcons.photo_camera),
+                  color: Colors.blue,
+                  onPressed: () async {
+                    await _pickImage(context);
+                  },
+                ),
               ),
             ],
           ),
