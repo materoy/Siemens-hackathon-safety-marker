@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:cache/cache.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:authentication/src/model/user.dart' as user_model;
 import 'package:flutter/foundation.dart';
 
@@ -22,17 +24,21 @@ class FirebaseAuthenticationProvider {
   FirebaseAuthenticationProvider(
       {FirebaseAuth? firebaseAuth,
       FirebaseFirestore? firestore,
+      firebase_storage.FirebaseStorage? storage,
       CacheClient? cache})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firestore = firestore ?? FirebaseFirestore.instance,
+        _storage = storage ?? firebase_storage.FirebaseStorage.instance,
         _cache = cache ?? CacheClient();
 
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
+  final firebase_storage.FirebaseStorage _storage;
   final CacheClient _cache;
 
   // ignore_for_file: constant_identifier_names
   static const String USERS_COLLECTION = 'users';
+  static const String STORAGE_REF_BUCKET = 'profiles';
 
   /// User cache key.
   /// Should only be used for testing purposes.
@@ -128,6 +134,16 @@ class FirebaseAuthenticationProvider {
     }
   }
 
+  Future<String> uploadProfileImage(Uint8List image, String uid) async {
+    final firebase_storage.TaskSnapshot task =
+        await _storage.ref('$STORAGE_REF_BUCKET/uid').putData(image);
+    return task.ref.getDownloadURL();
+  }
+
+  Future<void> updatePhotourl(String photoUrl) async {
+    _firebaseAuth.currentUser!.updatePhotoURL(photoUrl);
+  }
+
   Future<void> logout() async {
     try {
       await _firebaseAuth.signOut();
@@ -144,6 +160,8 @@ extension on User? {
           firstName: this?.displayName ?? '',
           lastName: '',
           email: this!.email!,
-          phone: this!.phoneNumber ?? '')
+          phone: this!.phoneNumber ?? '',
+          photoUrl: this!.photoURL,
+        )
       : user_model.User.empty;
 }

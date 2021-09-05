@@ -3,24 +3,28 @@ import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class User extends Equatable {
-  const User(
-      {this.uid,
-      required this.firstName,
-      required this.lastName,
-      required this.email,
-      required this.phone,
-      this.badgeNumber,
-      this.latLng});
+  const User({
+    this.uid,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.phone,
+    this.badgeNumber,
+    this.latLng,
+    this.photoUrl,
+  });
 
   factory User.fromMap(Map<String, dynamic> userMap) {
     return User(
-        uid: userMap['uid'],
-        firstName: userMap['firstName'],
-        lastName: userMap['lastName'],
-        email: userMap['email'],
-        phone: userMap['phone'],
-        badgeNumber: userMap['badgeNumber'],
-        latLng: (userMap['latLng'] as GeoPoint?).toLatLng());
+      uid: userMap['uid'],
+      firstName: userMap['firstName'],
+      lastName: userMap['lastName'],
+      email: userMap['email'],
+      phone: userMap['phone'],
+      badgeNumber: userMap['badgeNumber'],
+      latLng: (userMap['latLng'] as GeoPoint?).toLatLng(),
+      photoUrl: userMap['photoUrl'],
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -32,6 +36,7 @@ class User extends Equatable {
       'phone': phone,
       'badgeNumber': badgeNumber,
       'latLng': latLng.toGeoPoint(),
+      'photoUrl': photoUrl,
     };
   }
 
@@ -44,6 +49,7 @@ class User extends Equatable {
   final String phone;
   final String? badgeNumber;
   final LatLng? latLng;
+  final String? photoUrl;
 
   User copyWith({
     String? uid,
@@ -53,6 +59,7 @@ class User extends Equatable {
     String? phone,
     String? badgeNumber,
     LatLng? latLng,
+    String? photoUrl,
   }) {
     return User(
       firstName: firstName ?? this.firstName,
@@ -62,12 +69,13 @@ class User extends Equatable {
       badgeNumber: badgeNumber ?? this.badgeNumber,
       uid: uid ?? this.uid,
       latLng: latLng ?? this.latLng,
+      photoUrl: photoUrl ?? this.photoUrl,
     );
   }
 
   @override
   List<Object?> get props =>
-      [uid, firstName, lastName, email, phone, badgeNumber, latLng];
+      [uid, firstName, lastName, email, phone, badgeNumber, latLng, photoUrl];
 }
 
 extension on GeoPoint? {

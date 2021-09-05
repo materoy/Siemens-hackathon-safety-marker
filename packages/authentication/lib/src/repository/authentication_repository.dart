@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:authentication/src/provider/firebase_authentication_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,12 +31,25 @@ class AuthenticationRepository {
     }
   }
 
-  Future<user_model.User?> signup(user_model.User user, String password) async {
+  Future<user_model.User?> signup(
+      {required user_model.User user,
+      required String password,
+      Uint8List? image}) async {
     try {
       User? userLogin =
           await _firebaseAuthProvider.signup(user.email, password);
       if (userLogin != null) {
-        final userWithId = user.copyWith(uid: userLogin.uid);
+        var userWithId = user.copyWith(uid: userLogin.uid);
+
+        if (image != null) {
+          /// Uploads the user profile image to firebase storage
+          String photoDownloadUrl = await _firebaseAuthProvider
+              .uploadProfileImage(image, userWithId.uid!);
+          userWithId = userWithId.copyWith(photoUrl: photoDownloadUrl);
+          await _firebaseAuthProvider.updatePhotourl(photoDownloadUrl);
+        }
+
+        /// Adds the user to the database
         await _firebaseAuthProvider.addUserToFirestore(userWithId);
         return userWithId;
       }
