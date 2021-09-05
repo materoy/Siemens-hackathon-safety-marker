@@ -44,8 +44,10 @@ class MapRepository {
         desiredAccuracy: LocationAccuracy.high);
   }
 
-  Stream<List<User>> get usersStream =>
-      _firestore.collection('USERS').snapshots().map((event) => event.docs
+  Stream<List<User>> get usersStream => _firestore
+      .collection(AuthenticationRepository.USERS_COLLECTION)
+      .snapshots()
+      .map((event) => event.docs
           .map((userSnapshot) => User.fromMap(userSnapshot.data()))
           .toList());
 
@@ -59,7 +61,7 @@ class MapRepository {
       {required LatLng position, required String uid}) async {
     try {
       await _firestore
-          .collection('users')
+          .collection(AuthenticationRepository.USERS_COLLECTION)
           .doc(uid)
           .update({'latLng': GeoPoint(position.latitude, position.longitude)});
       log('Updating user location');

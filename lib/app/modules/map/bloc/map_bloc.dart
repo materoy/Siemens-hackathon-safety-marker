@@ -16,11 +16,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       : _repository = MapRepository(),
         super(MapInitial()) {
     add(MapCreatedEvent());
+
+    /// Starts and event to broadcast the users location
+    add(BroadcastLocationEvent());
   }
   final AuthenticationRepository _authenticationRepository;
   final MapRepository _repository;
   late final StreamSubscription _usersStreamSubscription;
   late final StreamSubscription _positionStream;
+
+  static const int UPDATE_LOCATION_TIME_DELTA = 30;
 
   @override
   Stream<MapState> mapEventToState(
@@ -33,8 +38,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     } else if (event is TrackUsersEvent) {
       yield* _mapTrackUserEventToState();
     } else if (event is BroadcastLocationEvent) {
+      /// Updates the current location of the user in the database
+      /// Every [UPDATE_LOCATION_TIME_DELTA]
       _positionStream = Geolocator.getPositionStream(
-              intervalDuration: const Duration(seconds: 10))
+              intervalDuration:
+                  const Duration(seconds: UPDATE_LOCATION_TIME_DELTA))
           .listen((newPosition) async {
         await _repository.updateUserPosition(
             position: LatLng(newPosition.latitude, newPosition.longitude),
@@ -49,15 +57,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Stream<MapState> _mapTrackUserEventToState() async* {
+    log('Tracking other users');
     yield* _repository.usersStream.map((users) {
       return TrackUserState(
         currentPosition: state.currentPosition,
         markers: List.generate(users.length, (index) {
-          log('Marker');
           if (users[index].latLng != null) {
+            log('Marker');
             return Marker(
-                markerId: MarkerId(users[index].uid!),
-                position: users[index].latLng!);
+              markerId: MarkerId(users[index].uid!),
+              position: users[index].latLng!,
+            );
           } else {
             return Marker(markerId: MarkerId(users[index].uid!));
           }
@@ -67,9 +77,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   void onMapCreated(GoogleMapController gmContoller) {
-    add(BroadcastLocationEvent());
+    /// As soon as the map is created an event is triggered to track other users
     add(TrackUsersEvent());
-    Future.delayed(const Duration(seconds: 1), () {});
   }
 
   @override

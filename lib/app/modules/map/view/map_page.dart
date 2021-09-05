@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:authentication/authentication.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +31,17 @@ class MapView extends StatelessWidget {
           if (state is! MapInitial) {
             return GoogleMap(
               mapType: MapType.satellite,
-              initialCameraPosition:
-                  CameraPosition(target: state.currentPosition!, zoom: 18),
+              initialCameraPosition: CameraPosition(
+                target: state.currentPosition!,
+                zoom: 19.151926040649414,
+                tilt: 59.440717697143555,
+              ),
               markers: state.markers ?? {},
               onMapCreated: context.read<MapBloc>().onMapCreated,
+              onLongPress: (latLng) {
+                log('Tracking other users');
+                context.read<MapBloc>().add(TrackUsersEvent());
+              },
             );
           }
           return const Center(

@@ -12,6 +12,8 @@ class AuthenticationRepository {
       : _firebaseAuthProvider = FirebaseAuthenticationProvider(
             firebaseAuth: firebaseAuth, firestore: firestore);
   final FirebaseAuthenticationProvider _firebaseAuthProvider;
+  static String get USERS_COLLECTION =>
+      FirebaseAuthenticationProvider.USERS_COLLECTION;
 
   // Stream<user_model.User> user() async* {
   //   yield* _firebaseAuthProvider.user();
