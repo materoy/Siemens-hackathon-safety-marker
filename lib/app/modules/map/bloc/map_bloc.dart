@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:authentication/authentication.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/map/repository/map_repository.dart';
@@ -24,6 +25,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   final MapRepository _repository;
   late final StreamSubscription _usersStreamSubscription;
   late final StreamSubscription _positionStream;
+  late final GoogleMapController mapController;
 
   static const int UPDATE_LOCATION_TIME_DELTA = 30;
 
@@ -62,11 +64,21 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       return TrackUserState(
         currentPosition: state.currentPosition,
         markers: List.generate(users.length, (index) {
-          if (users[index].latLng != null) {
+          final user = users[index];
+          if (user.latLng != null) {
             log('Marker');
             return Marker(
               markerId: MarkerId(users[index].uid!),
               position: users[index].latLng!,
+              onTap: () {
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: user.latLng!,
+                    zoom: 19.151926040649414,
+                    tilt: 59.440717697143555,
+                  ),
+                ));
+              },
             );
           } else {
             return Marker(markerId: MarkerId(users[index].uid!));
@@ -76,7 +88,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     });
   }
 
-  void onMapCreated(GoogleMapController gmContoller) {
+  void onMapCreated(GoogleMapController gmController) {
+    mapController = gmController;
+
     /// As soon as the map is created an event is triggered to track other users
     add(TrackUsersEvent());
   }
