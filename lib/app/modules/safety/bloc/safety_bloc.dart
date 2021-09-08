@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:authentication/authentication.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/model/model.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/safety/repository/safety_repository.dart';
 
@@ -29,6 +31,14 @@ class SafetyBloc extends Bloc<SafetyEvent, SafetyState> {
       yield ActiveSafetyAlertState(event.alert);
     } else if (event is DeactivateSafetyEvent) {
       yield InactiveSafetyAlertState();
+    } else if (event is SafeSafetyEvent) {
+      // Update database to user safe
+      await _safetyRepository.updateSafetyState(
+          uid: event.user!.uid!, safe: true);
+    } else if (event is NotSafeSafetyEvent) {
+      // Update database to user not safe
+      await _safetyRepository.updateSafetyState(
+          uid: event.user!.uid!, safe: false);
     }
   }
 

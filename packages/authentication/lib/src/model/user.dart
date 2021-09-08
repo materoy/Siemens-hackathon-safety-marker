@@ -3,16 +3,16 @@ import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class User extends Equatable {
-  const User({
-    this.uid,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.phone,
-    this.badgeNumber,
-    this.latLng,
-    this.photoUrl,
-  });
+  const User(
+      {this.uid,
+      required this.firstName,
+      required this.lastName,
+      required this.email,
+      required this.phone,
+      this.badgeNumber,
+      this.latLng,
+      this.photoUrl,
+      this.safe = false});
 
   factory User.fromMap(Map<String, dynamic> userMap) {
     return User(
@@ -24,6 +24,7 @@ class User extends Equatable {
       badgeNumber: userMap['badgeNumber'],
       latLng: (userMap['latLng'] as GeoPoint?).toLatLng(),
       photoUrl: userMap['photoUrl'],
+      safe: userMap['safe'],
     );
   }
 
@@ -37,6 +38,7 @@ class User extends Equatable {
       'badgeNumber': badgeNumber,
       'latLng': latLng.toGeoPoint(),
       'photoUrl': photoUrl,
+      'safe': safe,
     };
   }
 
@@ -50,6 +52,7 @@ class User extends Equatable {
   final String? badgeNumber;
   final LatLng? latLng;
   final String? photoUrl;
+  final bool safe;
 
   User copyWith({
     String? uid,
@@ -60,6 +63,7 @@ class User extends Equatable {
     String? badgeNumber,
     LatLng? latLng,
     String? photoUrl,
+    bool? safe,
   }) {
     return User(
       firstName: firstName ?? this.firstName,
@@ -70,12 +74,22 @@ class User extends Equatable {
       uid: uid ?? this.uid,
       latLng: latLng ?? this.latLng,
       photoUrl: photoUrl ?? this.photoUrl,
+      safe: safe ?? this.safe,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [uid, firstName, lastName, email, phone, badgeNumber, latLng, photoUrl];
+  List<Object?> get props => [
+        uid,
+        firstName,
+        lastName,
+        email,
+        phone,
+        badgeNumber,
+        latLng,
+        photoUrl,
+        safe
+      ];
 }
 
 extension on GeoPoint? {

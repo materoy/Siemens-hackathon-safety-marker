@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:authentication/authentication.dart';
 import 'package:bloc/bloc.dart';
@@ -59,17 +60,25 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Stream<MapState> _mapTrackUserEventToState() async* {
-    log('Tracking other users');
     yield* _repository.usersStream.map((users) {
       return TrackUserState(
         currentPosition: state.currentPosition,
-        markers: List.generate(users.length, (index) {
+        markers: Set<Marker>.from(List<Marker>.generate(users.length, (index) {
           final user = users[index];
+
           if (user.latLng != null) {
-            log('Marker');
+            log('User ${user.firstName} is safe ? ${user.safe}');
             return Marker(
-              markerId: MarkerId(users[index].uid!),
-              position: users[index].latLng!,
+              markerId: MarkerId(user.uid! + user.safe.toString()),
+              position: user.latLng!,
+              infoWindow: InfoWindow(
+                title: '${user.firstName} ${user.lastName}',
+              ),
+              icon: user.safe
+                  ? BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueGreen)
+                  : BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueRed),
               onTap: () {
                 mapController.animateCamera(CameraUpdate.newCameraPosition(
                   CameraPosition(
@@ -83,7 +92,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           } else {
             return Marker(markerId: MarkerId(users[index].uid!));
           }
-        }).toSet(),
+        })),
       );
     });
   }
@@ -99,6 +108,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Future<void> close() {
     _usersStreamSubscription.cancel();
     _positionStream.cancel();
+    mapController.dispose();
     return super.close();
   }
 }
