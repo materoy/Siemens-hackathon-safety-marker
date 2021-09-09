@@ -50,17 +50,20 @@ class HomeView extends StatelessWidget {
               padding: EdgeInsets.only(
                 left: SizeConfig.unitWidth * 6,
                 right: SizeConfig.unitWidth * 10,
+                top: 10,
               ),
               child: const Divider(thickness: 2),
             ),
-            SizedBox(height: SizeConfig.unitHeight * 4),
             BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
                 return Expanded(
                   child: ListView.builder(
                       itemCount: state.disasters.length,
-                      itemBuilder: (context, index) => DisasterCard(
-                            alert: state.disasters[index],
+                      itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DisasterCard(
+                              alert: state.disasters[index],
+                            ),
                           )),
                 );
               },
@@ -89,8 +92,33 @@ class DisasterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        child: Column(
-      children: [Text(alert.title.toString())],
-    ));
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        isThreeLine: true,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        leading: alert.images != null
+            ? Container(
+                height: double.infinity,
+                width: SizeConfig.unitWidth * 15,
+                clipBehavior: Clip.hardEdge,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                child: Image.network(alert.images!.first, fit: BoxFit.cover))
+            : null,
+        title: Text(alert.title ?? ''),
+        subtitle: Text(alert.description ?? ''),
+        trailing: alert.active
+            ? Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.red),
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Text(
+                  'ACTIVE',
+                  style: TextStyle(color: Colors.red, fontSize: 10),
+                ))
+            : null,
+      ),
+    );
   }
 }
