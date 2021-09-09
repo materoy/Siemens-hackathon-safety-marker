@@ -13,7 +13,8 @@ class CreateAlertEvent extends AlertEvent {
 }
 
 class UpdateAlertEvent extends AlertEvent {
-  UpdateAlertEvent(Alert alert) : super(alert: alert);
+  UpdateAlertEvent(Alert alert, {this.images}) : super(alert: alert);
+  final List<Uint8List>? images;
 }
 
 class CloseAlertEvent extends AlertEvent {}

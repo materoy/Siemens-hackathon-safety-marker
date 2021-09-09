@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:authentication/authentication.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/model/model.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/safety/repository/safety_repository.dart';
 
@@ -12,16 +11,23 @@ part 'safety_event.dart';
 part 'safety_state.dart';
 
 class SafetyBloc extends Bloc<SafetyEvent, SafetyState> {
-  SafetyBloc() : super(InactiveSafetyAlertState()) {
+  SafetyBloc(this.user) : super(InactiveSafetyAlertState()) {
     _alertSubscription =
         _safetyRepository.activeAlertsStream.listen(_onalertStateChanged);
   }
   final SafetyRepository _safetyRepository = SafetyRepository();
   late final StreamSubscription<Alert?> _alertSubscription;
+  final User user;
 
-  void _onalertStateChanged(Alert? alert) => alert != null
-      ? add(ActivateSafetyEvent(alert))
-      : add(DeactivateSafetyEvent(Alert.empty));
+  void _onalertStateChanged(Alert? alert) {
+    if (alert != null) {
+      /// Does not immediately raise alert for current user until
+      /// alert metadata is set
+      if (alert.creatorId != user.uid) add(ActivateSafetyEvent(alert));
+    } else {
+      add(DeactivateSafetyEvent(Alert.empty));
+    }
+  }
 
   @override
   Stream<SafetyState> mapEventToState(

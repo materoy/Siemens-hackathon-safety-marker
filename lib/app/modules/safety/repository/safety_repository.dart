@@ -14,6 +14,7 @@ class SafetyRepository {
       .snapshots()
       .map((querySnapshot) => querySnapshot.docs.isNotEmpty
           ? Alert.fromMap(querySnapshot.docs.last.data())
+              .copyWith(alertId: querySnapshot.docs.last.id)
           : null);
 
   Future<void> updateSafetyState(
