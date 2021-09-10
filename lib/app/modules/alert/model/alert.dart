@@ -1,15 +1,19 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Alert extends Equatable {
-  const Alert(
-      {this.alertId,
-      required this.creatorId,
-      this.title,
-      this.type,
-      this.description,
-      required this.time,
-      this.active = true});
+  const Alert({
+    this.alertId,
+    required this.creatorId,
+    this.title,
+    this.type,
+    this.description,
+    required this.time,
+    this.active = true,
+    this.images,
+  });
 
   factory Alert.fromMap(Map<String, dynamic> alertMap) {
     return Alert(
@@ -20,6 +24,9 @@ class Alert extends Equatable {
       description: alertMap['description'] as String?,
       title: alertMap['title'] as String?,
       type: alertMap['type'] as String?,
+      images: (alertMap['images'] as List?)
+          ?.map((dynamic e) => e as String)
+          .toList(),
     );
   }
 
@@ -32,6 +39,7 @@ class Alert extends Equatable {
       'description': description,
       'time': time,
       'active': active,
+      'images': images,
     };
   }
 
@@ -42,6 +50,7 @@ class Alert extends Equatable {
   final String? description;
   final DateTime time;
   final bool active;
+  final List<String>? images;
 
   static Alert empty = Alert(
       time: DateTime.now(),
@@ -54,7 +63,7 @@ class Alert extends Equatable {
 
   @override
   List<Object?> get props =>
-      [alertId, time, creatorId, active, description, title, type];
+      [alertId, time, creatorId, active, description, title, type, images];
 
   Alert copyWith({
     final String? alertId,
@@ -63,6 +72,7 @@ class Alert extends Equatable {
     final String? description,
     final DateTime? time,
     final bool? active,
+    final List<String>? images,
   }) {
     return Alert(
       time: time ?? this.time,
@@ -72,6 +82,7 @@ class Alert extends Equatable {
       description: description ?? this.description,
       title: title ?? this.title,
       type: type ?? this.type,
+      images: images ?? this.images,
     );
   }
 }

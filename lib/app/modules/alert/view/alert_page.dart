@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
@@ -19,23 +17,14 @@ class AlertPage extends StatelessWidget {
     /// Listens for an active alert event
     /// Navigates to safety page incase of one
     return BlocListener<SafetyBloc, SafetyState>(
-      listenWhen: (previous, current) =>
-          previous.alert.alertId != current.alert.alertId,
-      listener: (context, state) {
-        if (state is ActiveSafetyAlertState) {
-          Navigator.pushNamed(context, Routes.ALERT_RESPONSE);
-        }
-      },
-      child: RepositoryProvider.value(
-        value: AlertRepository(),
-        child: Builder(builder: (context) {
-          return BlocProvider<AlertBloc>(
-            create: (_) => AlertBloc(context.read<AlertRepository>()),
-            child: const AlertView(),
-          );
-        }),
-      ),
-    );
+        listenWhen: (previous, current) =>
+            previous.alert.alertId != current.alert.alertId,
+        listener: (context, state) {
+          if (state is ActiveSafetyAlertState) {
+            Navigator.pushNamed(context, Routes.ALERT_RESPONSE);
+          }
+        },
+        child: const AlertView());
   }
 }
 
@@ -65,6 +54,8 @@ class AlertView extends StatelessWidget {
                     context.read<AlertBloc>().add(CreateAlertEvent(Alert(
                         time: DateTime.now(),
                         creatorId: context.read<AppBloc>().state.user.uid!)));
+
+                    Navigator.pushNamed(context, Routes.ALERT_DETAILS);
                   },
                 ),
                 const Spacer(flex: 2),

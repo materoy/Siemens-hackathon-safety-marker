@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -21,7 +22,7 @@ class AlertBloc extends Bloc<AlertEvent, AlertState> {
       final alertId = await _alertRepository.createAlert(event.alert);
       yield CurrentAlertState(event.alert.copyWith(alertId: alertId));
     } else if (event is UpdateAlertEvent) {
-      await _alertRepository.updateAlertDetails(event.alert);
+      await _alertRepository.updateAlertDetails(event.alert, event.images);
       yield CurrentAlertState(event.alert);
     } else {
       yield NoAlertState();

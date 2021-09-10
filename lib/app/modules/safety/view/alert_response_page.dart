@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
+import 'package:siemens_hackathon_safety_marker/app/modules/safety/bloc/safety_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 
 class AlertResponsePage extends StatelessWidget {
@@ -31,14 +34,22 @@ class AlertResponsePage extends StatelessWidget {
               MarkerButton(
                 text: 'YES',
                 color: Colors.green,
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, Routes.MAP),
+                onPressed: () {
+                  context.read<SafetyBloc>().add(SafeSafetyEvent(
+                      alert: context.read<SafetyBloc>().state.alert,
+                      user: context.read<AppBloc>().state.user));
+                  Navigator.pushReplacementNamed(context, Routes.MAP);
+                },
               ),
               MarkerButton(
                 text: 'NO',
                 color: Colors.red,
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, Routes.RESCUE),
+                onPressed: () {
+                  context.read<SafetyBloc>().add(NotSafeSafetyEvent(
+                      alert: context.read<SafetyBloc>().state.alert,
+                      user: context.read<AppBloc>().state.user));
+                  Navigator.pushReplacementNamed(context, Routes.RESCUE);
+                },
               ),
             ],
           ),

@@ -9,11 +9,13 @@ abstract class Routes {
   static const ALERT = _Paths.ALERT;
   static const SETTINGS = _Paths.SETTINGS;
   static const ALERT_RESPONSE = _Paths.ALERT_RESPONSE;
+  static const ALERT_DETAILS = _Paths.ALERT_DETAILS;
   static const RESCUE = _Paths.RESCUE;
   static const LOGIN = _Paths.LOGIN;
   static const SIGNUP = _Paths.SIGNUP;
   static const SAFETY = _Paths.SAFETY;
   static const MAP = _Paths.MAP;
+  static const RECENT_DISASTER = _Paths.RECENT_DISASTER;
 }
 
 abstract class _Paths {
@@ -21,9 +23,11 @@ abstract class _Paths {
   static const ALERT = '/alert';
   static const SETTINGS = '/settings';
   static const ALERT_RESPONSE = '/alert_response';
+  static const ALERT_DETAILS = '/alert_details';
   static const RESCUE = '/rescue';
   static const LOGIN = '/login';
   static const SIGNUP = '/signup';
   static const SAFETY = '/safety';
   static const MAP = '/map';
+  static const RECENT_DISASTER = '/recent_disaster';
 }

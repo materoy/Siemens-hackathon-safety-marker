@@ -1,11 +1,16 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/model/model.dart';
 
 class AlertRepository {
-  AlertRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  AlertRepository({FirebaseFirestore? firestore, FirebaseStorage? storage})
+      : _firestore = firestore ?? FirebaseFirestore.instance,
+        _storage = storage ?? FirebaseStorage.instance;
 
   final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
 
   // ignore: constant_identifier_names
   static const ALERTS_COLLECTION = 'alerts';
@@ -19,11 +24,21 @@ class AlertRepository {
     return documentReference.id;
   }
 
-  Future<void> updateAlertDetails(Alert alert) async {
+  Future<void> updateAlertDetails(Alert alert, List<Uint8List>? images) async {
+    final imagesUrl = List<String>.empty(growable: true);
+    if (images != null) {
+      for (var i = 0; i < images.length; i++) {
+        final storageReference =
+            _storage.ref('$ALERTS_COLLECTION/${alert.alertId}/$i');
+        final uploadTask = await storageReference.putData(images[i]);
+        final imageUrl = await uploadTask.ref.getDownloadURL();
+        imagesUrl.add(imageUrl);
+      }
+    }
     await _firestore
         .collection(ALERTS_COLLECTION)
         .doc(alert.alertId)
-        .update(alert.toMap());
+        .update(alert.copyWith(images: imagesUrl).toMap());
   }
 
   /// Sets the alert current value to false

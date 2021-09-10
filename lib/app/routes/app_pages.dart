@@ -19,9 +19,14 @@ class AppPages {
     _Paths.ALERT: (_) => const AlertPage(),
     _Paths.SETTINGS: (_) => const SettingsPage(),
     _Paths.ALERT_RESPONSE: (_) => const AlertResponsePage(),
+    _Paths.ALERT_DETAILS: (_) => const AlertDetailsPage(),
     _Paths.RESCUE: (_) => const RescuePage(),
     _Paths.LOGIN: (_) => const LoginPage(),
     _Paths.SIGNUP: (_) => const SignupPage(),
-    _Paths.MAP: (_) => const MapPage()
+    _Paths.MAP: (_) => const MapPage(),
+    _Paths.RECENT_DISASTER: (context) {
+      final alert = ModalRoute.of(context)!.settings.arguments! as Alert;
+      return RecentDisasterPage(alert: alert);
+    },
   };
 }

@@ -1,16 +1,20 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:authentication/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UpdateLocationFailed implements Exception {}
 
 class MapRepository {
-  MapRepository({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  MapRepository({FirebaseFirestore? firestore, FirebaseStorage? storage})
+      : _firestore = firestore ?? FirebaseFirestore.instance,
+        _storage = storage ?? FirebaseStorage.instance;
   final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
 
   Stream<Position> get streamPosition => Geolocator.getPositionStream();
 
@@ -44,8 +48,10 @@ class MapRepository {
         desiredAccuracy: LocationAccuracy.high);
   }
 
-  Stream<List<User>> get usersStream =>
-      _firestore.collection('USERS').snapshots().map((event) => event.docs
+  Stream<List<User>> get usersStream => _firestore
+      .collection(AuthenticationRepository.USERS_COLLECTION)
+      .snapshots()
+      .map((event) => event.docs
           .map((userSnapshot) => User.fromMap(userSnapshot.data()))
           .toList());
 
@@ -59,12 +65,17 @@ class MapRepository {
       {required LatLng position, required String uid}) async {
     try {
       await _firestore
-          .collection('USERS')
+          .collection(AuthenticationRepository.USERS_COLLECTION)
           .doc(uid)
           .update({'latLng': GeoPoint(position.latitude, position.longitude)});
       log('Updating user location');
     } catch (e) {
+      log(e.toString());
       throw UpdateLocationFailed();
     }
+  }
+
+  Future<Uint8List?> getProfileImage(String url) async {
+    return _storage.refFromURL(url).getData();
   }
 }

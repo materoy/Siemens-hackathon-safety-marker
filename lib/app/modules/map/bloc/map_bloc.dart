@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:authentication/authentication.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/map/repository/map_repository.dart';
@@ -16,11 +18,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       : _repository = MapRepository(),
         super(MapInitial()) {
     add(MapCreatedEvent());
+
+    /// Starts and event to broadcast the users location
+    add(BroadcastLocationEvent());
   }
   final AuthenticationRepository _authenticationRepository;
   final MapRepository _repository;
   late final StreamSubscription _usersStreamSubscription;
   late final StreamSubscription _positionStream;
+  late final GoogleMapController mapController;
+
+  static const int UPDATE_LOCATION_TIME_DELTA = 30;
 
   @override
   Stream<MapState> mapEventToState(
@@ -33,8 +41,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     } else if (event is TrackUsersEvent) {
       yield* _mapTrackUserEventToState();
     } else if (event is BroadcastLocationEvent) {
-      _positionStream =
-          Geolocator.getPositionStream().listen((newPosition) async {
+      /// Updates the current location of the user in the database
+      /// Every [UPDATE_LOCATION_TIME_DELTA]
+      _positionStream = Geolocator.getPositionStream(
+              intervalDuration:
+                  const Duration(seconds: UPDATE_LOCATION_TIME_DELTA))
+          .listen((newPosition) async {
         await _repository.updateUserPosition(
             position: LatLng(newPosition.latitude, newPosition.longitude),
             uid: _authenticationRepository.currentUser.uid!);
@@ -48,34 +60,55 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Stream<MapState> _mapTrackUserEventToState() async* {
-    log('called');
     yield* _repository.usersStream.map((users) {
-      log('Change location stream');
       return TrackUserState(
         currentPosition: state.currentPosition,
-        markers: List.generate(users.length, (index) {
-          log('Marker');
-          if (users[index].latLng != null) {
+        markers: Set<Marker>.from(List<Marker>.generate(users.length, (index) {
+          final user = users[index];
+
+          if (user.latLng != null) {
+            log('User ${user.firstName} is safe ? ${user.safe}');
             return Marker(
-                markerId: MarkerId(users[index].uid!),
-                position: users[index].latLng!);
+              markerId: MarkerId(user.uid! + user.safe.toString()),
+              position: user.latLng!,
+              infoWindow: InfoWindow(
+                title: '${user.firstName} ${user.lastName}',
+              ),
+              icon: user.safe
+                  ? BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueGreen)
+                  : BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueRed),
+              onTap: () {
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: user.latLng!,
+                    zoom: 19.151926040649414,
+                    tilt: 59.440717697143555,
+                  ),
+                ));
+              },
+            );
           } else {
             return Marker(markerId: MarkerId(users[index].uid!));
           }
-        }).toSet(),
+        })),
       );
     });
   }
 
-  void onMapCreated(GoogleMapController gmContoller) {
+  void onMapCreated(GoogleMapController gmController) {
+    mapController = gmController;
+
+    /// As soon as the map is created an event is triggered to track other users
     add(TrackUsersEvent());
-    add(BroadcastLocationEvent());
   }
 
   @override
   Future<void> close() {
     _usersStreamSubscription.cancel();
     _positionStream.cancel();
+    mapController.dispose();
     return super.close();
   }
 }

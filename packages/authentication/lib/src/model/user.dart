@@ -10,17 +10,22 @@ class User extends Equatable {
       required this.email,
       required this.phone,
       this.badgeNumber,
-      this.latLng});
+      this.latLng,
+      this.photoUrl,
+      this.safe = false});
 
   factory User.fromMap(Map<String, dynamic> userMap) {
     return User(
-        uid: userMap['uid'],
-        firstName: userMap['firstName'],
-        lastName: userMap['lastName'],
-        email: userMap['email'],
-        phone: userMap['phone'],
-        badgeNumber: userMap['badgeNumber'],
-        latLng: (userMap['latLng'] as GeoPoint?).toLatLng());
+      uid: userMap['uid'],
+      firstName: userMap['firstName'],
+      lastName: userMap['lastName'],
+      email: userMap['email'],
+      phone: userMap['phone'],
+      badgeNumber: userMap['badgeNumber'],
+      latLng: (userMap['latLng'] as GeoPoint?).toLatLng(),
+      photoUrl: userMap['photoUrl'],
+      safe: userMap['safe'],
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -32,6 +37,8 @@ class User extends Equatable {
       'phone': phone,
       'badgeNumber': badgeNumber,
       'latLng': latLng.toGeoPoint(),
+      'photoUrl': photoUrl,
+      'safe': safe,
     };
   }
 
@@ -44,6 +51,8 @@ class User extends Equatable {
   final String phone;
   final String? badgeNumber;
   final LatLng? latLng;
+  final String? photoUrl;
+  final bool safe;
 
   User copyWith({
     String? uid,
@@ -53,6 +62,8 @@ class User extends Equatable {
     String? phone,
     String? badgeNumber,
     LatLng? latLng,
+    String? photoUrl,
+    bool? safe,
   }) {
     return User(
       firstName: firstName ?? this.firstName,
@@ -62,12 +73,23 @@ class User extends Equatable {
       badgeNumber: badgeNumber ?? this.badgeNumber,
       uid: uid ?? this.uid,
       latLng: latLng ?? this.latLng,
+      photoUrl: photoUrl ?? this.photoUrl,
+      safe: safe ?? this.safe,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [uid, firstName, lastName, email, phone, badgeNumber, latLng];
+  List<Object?> get props => [
+        uid,
+        firstName,
+        lastName,
+        email,
+        phone,
+        badgeNumber,
+        latLng,
+        photoUrl,
+        safe
+      ];
 }
 
 extension on GeoPoint? {

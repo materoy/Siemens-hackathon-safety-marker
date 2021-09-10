@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/widgets/bottom_navigation_bar.dart';
-import 'package:siemens_hackathon_safety_marker/app/modules/home/bloc/home_bloc.dart';
+import 'package:siemens_hackathon_safety_marker/app/modules/alert/alert.dart';
+import 'package:siemens_hackathon_safety_marker/app/modules/home/cubit/home_cubit.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,7 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => HomeBloc(),
+      create: (_) => HomeCubit(),
       child: const HomeView(),
     );
   }
@@ -25,19 +27,101 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     // final l10n = context.l10n;
     return Scaffold(
-      // appBar: AppBar(title: Text(l10n.counterAppBarTitle)),
+      appBar: AppBar(
+        title: const Text('Safety Marker'),
+        centerTitle: true,
+        leading: Container(),
+      ),
       bottomNavigationBar: const MarkerBottomNavigationBar(),
       body: SafeArea(
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.ALERT_RESPONSE);
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left: SizeConfig.unitWidth * 10,
+                    top: SizeConfig.unitHeight * 4),
+                child: Text('Recent disasters',
+                    style: Theme.of(context).textTheme.headline6),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: SizeConfig.unitWidth * 6,
+                right: SizeConfig.unitWidth * 10,
+                top: 10,
+              ),
+              child: const Divider(thickness: 2),
+            ),
+            BlocBuilder<HomeCubit, HomeState>(
+              builder: (context, state) {
+                return Expanded(
+                  child: ListView.builder(
+                      itemCount: state.disasters.length,
+                      itemBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: DisasterCard(
+                              alert: state.disasters[index],
+                            ),
+                          )),
+                );
               },
-              child: const Text('Respond to alert'),
+            ),
+            Opacity(
+              opacity: .1,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.ALERT_RESPONSE);
+                },
+                child: const Text('Respond to alert'),
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class DisasterCard extends StatelessWidget {
+  const DisasterCard({Key? key, required this.alert}) : super(key: key);
+
+  final Alert alert;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        onTap: () {
+          Navigator.pushNamed(context, Routes.RECENT_DISASTER,
+              arguments: alert);
+        },
+        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        isThreeLine: true,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        leading: alert.images != null
+            ? Container(
+                height: double.infinity,
+                width: SizeConfig.unitWidth * 15,
+                clipBehavior: Clip.hardEdge,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                child: Image.network(alert.images!.first, fit: BoxFit.cover))
+            : null,
+        title: Text(alert.title ?? ''),
+        subtitle: Text(alert.description ?? ''),
+        trailing: alert.active
+            ? Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.red),
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Text(
+                  'ACTIVE',
+                  style: TextStyle(color: Colors.red, fontSize: 10),
+                ))
+            : null,
       ),
     );
   }
