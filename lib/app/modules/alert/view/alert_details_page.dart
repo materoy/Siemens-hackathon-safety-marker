@@ -279,12 +279,17 @@ class ThankyouDialog extends StatelessWidget {
             const Text("Your alert may save a life it's very much appreciated"),
         actions: [
           TextButton(
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, Routes.MAP),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, Routes.MAP);
+              },
               child: const Text('Map')),
           TextButton(
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, Routes.MAP),
+              onPressed: () {
+                Navigator.pop(context);
+
+                Navigator.pushReplacementNamed(context, Routes.MAP);
+              },
               child: const Text(
                 'Cancel',
                 style: TextStyle(color: Colors.red),

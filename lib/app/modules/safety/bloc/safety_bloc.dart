@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:authentication/authentication.dart';
 import 'package:bloc/bloc.dart';
