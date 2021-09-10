@@ -60,7 +60,7 @@ class HomeView extends StatelessWidget {
                   child: ListView.builder(
                       itemCount: state.disasters.length,
                       itemBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8),
                             child: DisasterCard(
                               alert: state.disasters[index],
                             ),
@@ -93,6 +93,10 @@ class DisasterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: () {
+          Navigator.pushNamed(context, Routes.RECENT_DISASTER,
+              arguments: alert);
+        },
         contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         isThreeLine: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

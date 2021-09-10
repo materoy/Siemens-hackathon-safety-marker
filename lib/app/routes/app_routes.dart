@@ -15,6 +15,7 @@ abstract class Routes {
   static const SIGNUP = _Paths.SIGNUP;
   static const SAFETY = _Paths.SAFETY;
   static const MAP = _Paths.MAP;
+  static const RECENT_DISASTER = _Paths.RECENT_DISASTER;
 }
 
 abstract class _Paths {
@@ -28,4 +29,5 @@ abstract class _Paths {
   static const SIGNUP = '/signup';
   static const SAFETY = '/safety';
   static const MAP = '/map';
+  static const RECENT_DISASTER = '/recent_disaster';
 }
