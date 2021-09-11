@@ -15,26 +15,30 @@ export const alertsTrigger = functions.firestore.document("alerts/{alertId}")
   .onWrite(async (snapshot) => {
     const title = snapshot.after.get("title");
     const description = snapshot.after.get("description");
-    const message : admin.messaging.Message = {
-      condition: "",
+    var imagesUrl: string[] = snapshot.after.get("images");
+    var imageUrl : string  = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FHazard_symbol&psig=AOvVaw1UZgQZEi0p-etfZyPdh_OE&ust=1631425985622000&source=images&cd=vfe&ved=0CAkQjRxqFwoTCICKts6d9vICFQAAAAAdAAAAABAE";
+    if (imagesUrl != null) {
+      imageUrl = imagesUrl[0];
+    }
+    const message: admin.messaging.Message = {
+      topic: "alerts",
       notification: {
         title: title,
-        body: description
+        body: description,
+        imageUrl: imageUrl,
       },
-      data: {
-        click_action: "FLUTTER_NOTIFICATION_CLICK",
-        title: "title",
-        body: "body",
-      },
+      // data: {
+      //   click_action: "FLUTTER_NOTIFICATION_CLICK",
+      //   title: "title",
+      //   body: "body",
+      // },
       android: {
         priority: "high"
       },
     };
 
-    var response =  await admin.messaging().send(message)
+    await admin.messaging().send(message)
 
-    console.log(title)
-    console.log(response)
   });
 
 

@@ -16,18 +16,15 @@ import 'package:flutter/widgets.dart';
 import 'package:siemens_hackathon_safety_marker/app/app.dart';
 import 'package:siemens_hackathon_safety_marker/app/app_bloc_observer.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-
-  log('Handling a background message: ${message.messageId}');
-}
+import 'package:siemens_hackathon_safety_marker/app/global/util/firebase_messaging_handler.dart';
 
 Future<void> main() async {
   Bloc.observer = AppBlocObserver();
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  await FirebaseMessaging.instance.subscribeToTopic('alerts');
   final token = await FirebaseMessaging.instance.getToken();
   log(token.toString());
 
