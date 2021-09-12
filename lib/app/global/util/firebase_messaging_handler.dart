@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
-  log('Handling a background message: ${message.notification}');
+  log('Handling a background message: ${message.notification?.title}');
 
   const platform = MethodChannel('com.siemens.hackathon/platform_interface');
 

@@ -50,9 +50,9 @@ class AlertView extends StatelessWidget {
                 const Spacer(flex: 10),
                 AlertButton(
                   onPressed: () {
-                    context.read<AlertBloc>().add(CreateAlertEvent(Alert(
-                        time: DateTime.now(),
-                        creatorId: context.read<AppBloc>().state.user.uid!)));
+                    // context.read<AlertBloc>().add(CreateAlertEvent(Alert(
+                    //     time: DateTime.now(),
+                    //     creatorId: context.read<AppBloc>().state.user.uid!)));
 
                     Navigator.pushNamed(context, Routes.ALERT_DETAILS);
                   },

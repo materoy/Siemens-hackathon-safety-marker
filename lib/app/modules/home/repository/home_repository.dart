@@ -10,6 +10,7 @@ class HomeRepository {
 
   Stream<List<Alert>> get getDisasters => _firestore
       .collection(AlertRepository.ALERTS_COLLECTION)
+      .orderBy('time')
       .snapshots()
       .map((querySnaphot) => querySnaphot.docs
           .map((documentSnapshot) => Alert.fromMap(documentSnapshot.data()))
