@@ -5,7 +5,6 @@ import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart
 import 'package:siemens_hackathon_safety_marker/app/global/widgets/bottom_navigation_bar.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/bloc/alert_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/model/alert.dart';
-import 'package:siemens_hackathon_safety_marker/app/modules/alert/repository/alert_repository.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/safety/safety.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 

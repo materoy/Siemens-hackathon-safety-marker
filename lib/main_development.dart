@@ -10,16 +10,23 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:siemens_hackathon_safety_marker/app/app.dart';
 import 'package:siemens_hackathon_safety_marker/app/app_bloc_observer.dart';
+
+import 'package:siemens_hackathon_safety_marker/app/global/util/firebase_messaging_handler.dart';
 
 Future<void> main() async {
   Bloc.observer = AppBlocObserver();
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  await FirebaseMessaging.instance.subscribeToTopic('alerts');
+  final token = await FirebaseMessaging.instance.getToken();
+  log(token.toString());
 
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
