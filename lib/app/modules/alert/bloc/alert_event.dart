@@ -9,7 +9,8 @@ abstract class AlertEvent extends Equatable {
 }
 
 class CreateAlertEvent extends AlertEvent {
-  CreateAlertEvent(Alert alert) : super(alert: alert);
+  CreateAlertEvent(Alert alert, {this.images}) : super(alert: alert);
+  final List<Uint8List>? images;
 }
 
 class UpdateAlertEvent extends AlertEvent {

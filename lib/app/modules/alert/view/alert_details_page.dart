@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/bloc/alert_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
+
+import '../alert.dart';
 
 class AlertDetailsPage extends StatefulWidget {
   const AlertDetailsPage({Key? key}) : super(key: key);
@@ -97,7 +100,7 @@ class _AlertDetailsPageState extends State<AlertDetailsPage> {
                   children: [
                     /// Alert button
                     sendButton(
-                      onPressed: updateAlert,
+                      onPressed: _createAlert,
                       child: Text(
                         'ALERT',
                         style: Theme.of(context).primaryTextTheme.headline6,
@@ -106,6 +109,7 @@ class _AlertDetailsPageState extends State<AlertDetailsPage> {
                     ),
                     sendButton(
                         onPressed: () {
+                          _createAlert();
                           Navigator.pushReplacementNamed(context, Routes.MAP);
                         },
                         child: const Text(
@@ -132,6 +136,19 @@ class _AlertDetailsPageState extends State<AlertDetailsPage> {
           type: _alertType,
         ),
         images: _images));
+  }
+
+  void _createAlert() {
+    context.read<AlertBloc>().add(CreateAlertEvent(
+          Alert(
+            time: DateTime.now(),
+            creatorId: context.read<AppBloc>().state.user.uid!,
+            title: _titleController.text,
+            description: _descriptionController.text,
+            type: _alertType,
+          ),
+          images: _images,
+        ));
 
     ThankyouDialog.show(context);
   }

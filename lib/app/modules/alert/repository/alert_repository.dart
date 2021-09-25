@@ -17,6 +17,7 @@ class AlertRepository {
 
   /// Creates an instance of a new alert in the database
   /// Returns is documentId
+  /// To mantain backward compatibility this function will be retained
   Future<String> createAlert(Alert alert) async {
     final documentReference =
         await _firestore.collection(ALERTS_COLLECTION).add(alert.toMap());
@@ -24,7 +25,11 @@ class AlertRepository {
     return documentReference.id;
   }
 
-  Future<void> updateAlertDetails(Alert alert, List<Uint8List>? images) async {
+  /// Uploads the images to firebase storage and returns list of download urls
+  /// Creates a document in alerts collection with alert details and images
+  /// updates the id of the alert in the end
+  Future<Alert> createAlertWithDetails(
+      Alert alert, List<Uint8List>? images) async {
     final imagesUrl = List<String>.empty(growable: true);
     if (images != null) {
       for (var i = 0; i < images.length; i++) {
@@ -35,10 +40,17 @@ class AlertRepository {
         imagesUrl.add(imageUrl);
       }
     }
+
+    final documentReference = await _firestore
+        .collection(ALERTS_COLLECTION)
+        .add(alert.copyWith(images: imagesUrl).toMap());
+
     await _firestore
         .collection(ALERTS_COLLECTION)
-        .doc(alert.alertId)
-        .update(alert.copyWith(images: imagesUrl).toMap());
+        .doc(documentReference.id)
+        .update({'alertId': documentReference.id});
+
+    return alert;
   }
 
   /// Sets the alert current value to false
