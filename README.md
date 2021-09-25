@@ -1,7 +1,7 @@
 # Siemens Hackathon Safety Marker
 
 An app used for safety assurance of miners and workers in mines and factories.
-This project was dine in accordance with the Siemens Hackerthon Guidelines
+This project was done in accordance with the Siemens Hackerthon Guidelines
 
 ![coverage][coverage_badge]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
