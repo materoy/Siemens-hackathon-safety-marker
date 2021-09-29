@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/widgets/bottom_navigation_bar.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/alert.dart';
@@ -91,37 +94,90 @@ class DisasterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        onTap: () {
-          Navigator.pushNamed(context, Routes.RECENT_DISASTER,
-              arguments: alert);
-        },
-        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        isThreeLine: true,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        leading: alert.images != null && alert.images!.isNotEmpty
-            ? Container(
-                height: double.infinity,
-                width: SizeConfig.unitWidth * 15,
-                clipBehavior: Clip.hardEdge,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                child: Image.network(alert.images!.first, fit: BoxFit.cover))
-            : null,
-        title: Text(alert.title ?? ''),
-        subtitle: Text(alert.description ?? ''),
-        trailing: alert.active
-            ? Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.red),
-                    borderRadius: BorderRadius.circular(8)),
-                child: const Text(
-                  'ACTIVE',
-                  style: TextStyle(color: Colors.red, fontSize: 10),
-                ))
-            : null,
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, Routes.RECENT_DISASTER,
+          arguments: alert),
+      child: Card(
+        elevation: 10,
+        clipBehavior: Clip.hardEdge,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            SizedBox(
+              height: SizeConfig.unitHeight * 28,
+              child: Stack(
+                children: [
+                  if (alert.images != null && alert.images!.isNotEmpty)
+                    Container(
+                        height: double.infinity,
+                        // width: SizeConfig.unitWidth * 15,
+                        width: double.infinity,
+                        foregroundDecoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [Colors.transparent, Colors.black87],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter)),
+                        child: Image.network(alert.images!.first,
+                            fit: BoxFit.cover)),
+
+                  /// Active stamp
+                  if (alert.active)
+                    Opacity(
+                      opacity: .3,
+                      child: Center(
+                        child: Transform.rotate(
+                          angle: -pi / 12.0,
+                          child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.red, width: 3),
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: const Text(
+                                'ACTIVE NOW',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.w900),
+                              )),
+                        ),
+                      ),
+                    ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        alert.title ?? '',
+                        style: Theme.of(context).primaryTextTheme.headline6,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.unitWidth * 5,
+                  vertical: SizeConfig.unitHeight * 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    alert.description ?? '',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  Text(
+                    timeago.format(alert.time),
+                    style: Theme.of(context).textTheme.caption,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

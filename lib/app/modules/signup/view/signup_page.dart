@@ -45,6 +45,11 @@ class SignupForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _ProfileImage(),
+              const SizedBox(height: 8),
+              _FirstNameInput(),
+              const SizedBox(height: 8),
+              _LastNameInput(),
+              const SizedBox(height: 8),
               _EmailInput(),
               const SizedBox(height: 8),
               _PasswordInput(),
@@ -134,19 +139,54 @@ class FormTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.symmetric(vertical: SizeConfig.unitHeight * 2),
+      height: SizeConfig.unitHeight * 10,
       child: TextFormField(
         key: key,
         onChanged: onChanged,
         obscureText: obscureText ?? false,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           labelText: labelText,
           errorText: errorText,
         ),
       ),
+    );
+  }
+}
+
+class _FirstNameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignupCubit, SignupState>(
+      builder: (context, state) {
+        return FormTextField(
+          key: const Key('signupForm_firstNameInput_textField'),
+          onChanged: (firstName) =>
+              context.read<SignupCubit>().firstNameChanged(firstName),
+          keyboardType: TextInputType.name,
+          labelText: 'First name',
+        );
+      },
+    );
+  }
+}
+
+class _LastNameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignupCubit, SignupState>(
+      builder: (context, state) {
+        return FormTextField(
+          key: const Key('signupForm_lastNameInput_textField'),
+          onChanged: (lastName) =>
+              context.read<SignupCubit>().lastNameChanged(lastName),
+          keyboardType: TextInputType.emailAddress,
+          labelText: 'Last name',
+        );
+      },
     );
   }
 }
