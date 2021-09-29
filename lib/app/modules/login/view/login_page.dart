@@ -1,9 +1,9 @@
 import 'package:authentication/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/global.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/login/cubit/login_cubit.dart';
-import 'package:formz/formz.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
 
 class LoginPage extends StatelessWidget {
@@ -35,12 +35,11 @@ class LoginForm extends StatelessWidget {
           // context.read<AppBloc>().add(AppUserChanged());
         }
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: SizeConfig.unitWidth * 10),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: SizeConfig.unitWidth * 20),
+        child: Align(
+          alignment: const Alignment(0, -1 / 3),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -69,14 +68,12 @@ class _EmailInput extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
-        return TextField(
+        return FormTextField(
           key: const Key('loginForm_emailInput_textField'),
           onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-              labelText: 'email',
-              helperText: '',
-              errorText: state.email.invalid ? 'invalid email' : null),
+          labelText: 'email',
+          errorText: state.email.invalid ? 'invalid email' : null,
         );
       },
     );
@@ -89,18 +86,53 @@ class _PasswordInput extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
-        return TextField(
+        return FormTextField(
           key: const Key('loginForm_passwordInput_textField'),
           onChanged: (password) =>
               context.read<LoginCubit>().passwordChanged(password),
+          keyboardType: TextInputType.visiblePassword,
           obscureText: true,
-          decoration: InputDecoration(
-            labelText: 'password',
-            helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
-          ),
+          labelText: 'password',
+          errorText: state.password.invalid ? 'invalid password' : null,
         );
       },
+    );
+  }
+}
+
+class FormTextField extends StatelessWidget {
+  const FormTextField({
+    Key? key,
+    this.textFieldKey,
+    required this.onChanged,
+    required this.keyboardType,
+    required this.labelText,
+    this.errorText,
+    this.obscureText,
+  }) : super(key: key);
+
+  final Key? textFieldKey;
+  final Function(String) onChanged;
+  final TextInputType keyboardType;
+  final String labelText;
+  final String? errorText;
+  final bool? obscureText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: SizeConfig.unitHeight * 2),
+      child: TextFormField(
+        key: key,
+        onChanged: onChanged,
+        obscureText: obscureText ?? false,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+          labelText: labelText,
+          errorText: errorText,
+        ),
+      ),
     );
   }
 }

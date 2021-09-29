@@ -75,6 +75,8 @@ class MarkerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(2),
+      height: SizeConfig.unitHeight * 30,
+      width: SizeConfig.unitHeight * 30,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: color.withOpacity(.2), width: 6),

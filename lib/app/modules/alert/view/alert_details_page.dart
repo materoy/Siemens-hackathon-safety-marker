@@ -6,10 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
+import 'package:siemens_hackathon_safety_marker/app/modules/alert/alert.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/alert/bloc/alert_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/routes/app_pages.dart';
-
-import '../alert.dart';
 
 class AlertDetailsPage extends StatefulWidget {
   const AlertDetailsPage({Key? key}) : super(key: key);

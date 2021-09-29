@@ -100,7 +100,7 @@ class DisasterCard extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         isThreeLine: true,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        leading: alert.images != null
+        leading: alert.images != null && alert.images!.isNotEmpty
             ? Container(
                 height: double.infinity,
                 width: SizeConfig.unitWidth * 15,

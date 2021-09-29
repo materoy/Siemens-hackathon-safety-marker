@@ -83,7 +83,10 @@ class RescueSentDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 TextButton(onPressed: () {}, child: const Text('Cancel')),
-                TextButton(onPressed: () {}, child: const Text('Go to map')),
+                TextButton(
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, Routes.MAP),
+                    child: const Text('Go to map')),
               ],
             )
           ],

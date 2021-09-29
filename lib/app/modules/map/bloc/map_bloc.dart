@@ -52,9 +52,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  Future<LatLng> _getUserLocation() async {
-    final position = await _repository.getCurrentPosition();
-    return LatLng(position.latitude, position.longitude);
+  Future<LatLng?> _getUserLocation() async {
+    try {
+      final position = await _repository.getCurrentPosition();
+      return LatLng(position.latitude, position.longitude);
+    } catch (e) {
+      // emit(state)
+      return null;
+    }
   }
 
   Stream<MapState> _mapTrackUserEventToState() async* {

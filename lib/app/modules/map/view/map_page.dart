@@ -31,7 +31,7 @@ class _MapViewState extends State<MapView> {
       appBar: AppBar(),
       body: BlocBuilder<MapBloc, MapState>(
         builder: (context, state) {
-          if (state is! MapInitial) {
+          if (state is! MapInitial && state.currentPosition != null) {
             return GoogleMap(
               mapType: MapType.satellite,
               initialCameraPosition: CameraPosition(
