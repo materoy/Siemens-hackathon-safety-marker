@@ -1,7 +1,29 @@
 # Siemens Hackathon Safety Marker
 
-An app used for safety assurance of miners and workers in mines and factories.
-This project was done in accordance with the Siemens Hackerthon Guidelines
+An application that mine employees can use to mark themselves as safe in the event of a disaster.\
+This project was built with flutter because of its multiplatform support capabilities.
+
+
+# Libraries
+## Development
+[Bloc](https://pub.dev/packages/bloc) : State management. \
+[Formz](https://pub.dev/packages/formz) : A unified form representation in Dart. \
+[Geolocator](https://pub.dev/packages/geolocator) : A Flutter geolocation plugin which provides easy access to platform specific location services. \
+[Cloud Firestore](https://pub.dev/packages/cloud_firestore) : A Flutter plugin to use the Cloud Firestore API. \
+[Firebase Storage](https://pub.dev/packages/firebase_storage) :
+Cloud sorage for flutter. \
+[Firebase Messaging](https://pub.dev/packages/firebase_messaging) : Firebase messaging pugin for flutter. Used to deliver realtime notifications to the users. 
+## Testing
+[Fake Cloud Firestore](https://pub.dev/packages/fake_cloud_firestore) : Fakes to write unit tests for Cloud Firestore. \
+[Firebase Auth Mocks](https://pub.dev/packages/firebase_auth_mocks) : Mocks for firebase authentication. \
+[Bloc Test](https://pub.dev/packages/bloc_test) : A Dart package that makes testing blocs and cubits easy. \
+[Mocktail](https://pub.dev/packages/mocktail) : Mock library for Dart.
+
+
+
+
+# Screenshots
+
 
 ![coverage][coverage_badge]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
