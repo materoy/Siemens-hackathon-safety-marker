@@ -123,7 +123,7 @@ class DisasterCard extends StatelessWidget {
                   /// Active stamp
                   if (alert.active)
                     Opacity(
-                      opacity: .3,
+                      opacity: .35,
                       child: Center(
                         child: Transform.rotate(
                           angle: -pi / 12.0,
@@ -131,7 +131,7 @@ class DisasterCard extends StatelessWidget {
                               padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                   border:
-                                      Border.all(color: Colors.red, width: 3),
+                                      Border.all(color: Colors.red, width: 4),
                                   borderRadius: BorderRadius.circular(8)),
                               child: const Text(
                                 'ACTIVE NOW',
