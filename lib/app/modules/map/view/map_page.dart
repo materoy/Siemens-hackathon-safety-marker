@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
 import 'package:siemens_hackathon_safety_marker/app/modules/map/bloc/map_bloc.dart';
 
@@ -39,6 +40,12 @@ class _MapViewState extends State<MapView> {
         },
         builder: (context, state) {
           if (state is! MapInitial && state.currentPosition != null) {
+            final markers = state.markers ?? {};
+            final user = context.read<AppBloc>().state.user;
+            markers.add(Marker(
+                markerId: MarkerId(user.uid!),
+                position: user.latLng!,
+                flat: true));
             return Stack(
               children: [
                 GoogleMap(
@@ -48,7 +55,7 @@ class _MapViewState extends State<MapView> {
                     zoom: 19.151926040649414,
                     tilt: 59.440717697143555,
                   ),
-                  markers: state.markers ?? {},
+                  markers: markers,
                   myLocationEnabled: true,
                   indoorViewEnabled: true,
                   onMapCreated: context.read<MapBloc>().onMapCreated,
