@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/app_bloc/app_bloc.dart';
 import 'package:siemens_hackathon_safety_marker/app/global/util/size_config.dart';
@@ -137,7 +139,9 @@ class _AlertDetailsPageState extends State<AlertDetailsPage> {
         images: _images));
   }
 
-  void _createAlert() {
+  Future _createAlert() async {
+    // final location = context.read<AppBloc>().state.user.latLng;
+    final position = await Geolocator.getCurrentPosition();
     context.read<AlertBloc>().add(CreateAlertEvent(
           Alert(
             time: DateTime.now(),
@@ -145,6 +149,7 @@ class _AlertDetailsPageState extends State<AlertDetailsPage> {
             title: _titleController.text,
             description: _descriptionController.text,
             type: _alertType,
+            location: LatLng(position.latitude, position.longitude),
           ),
           images: _images,
         ));

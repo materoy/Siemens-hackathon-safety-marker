@@ -42,10 +42,14 @@ class _MapViewState extends State<MapView> {
           if (state is! MapInitial && state.currentPosition != null) {
             final markers = state.markers ?? {};
             final user = context.read<AppBloc>().state.user;
-            markers.add(Marker(
-                markerId: MarkerId(user.uid!),
-                position: user.latLng!,
-                flat: true));
+            if (state.currentPosition != null) {
+              markers.add(Marker(
+                  markerId: MarkerId(user.uid!),
+                  position: state.currentPosition!,
+                  flat: true,
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueOrange)));
+            }
             return Stack(
               children: [
                 GoogleMap(

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Alert extends Equatable {
   const Alert({
@@ -11,6 +12,7 @@ class Alert extends Equatable {
     required this.time,
     this.active = true,
     this.images,
+    required this.location,
   });
 
   factory Alert.fromMap(Map<String, dynamic> alertMap) {
@@ -22,6 +24,7 @@ class Alert extends Equatable {
       description: alertMap['description'] as String?,
       title: alertMap['title'] as String?,
       type: alertMap['type'] as String?,
+      location: (alertMap['location'] as GeoPoint).toLatLng(),
       images: (alertMap['images'] as List?)
           ?.map((dynamic e) => e as String)
           .toList(),
@@ -38,6 +41,7 @@ class Alert extends Equatable {
       'time': time,
       'active': active,
       'images': images,
+      'location': location.toGeoPoint(),
     };
   }
 
@@ -49,6 +53,7 @@ class Alert extends Equatable {
   final DateTime time;
   final bool active;
   final List<String>? images;
+  final LatLng location;
 
   static Alert empty = Alert(
       time: DateTime.now(),
@@ -57,11 +62,21 @@ class Alert extends Equatable {
       active: false,
       description: '',
       title: '',
-      type: '');
+      type: '',
+      location: LatLng(0, 0));
 
   @override
-  List<Object?> get props =>
-      [alertId, time, creatorId, active, description, title, type, images];
+  List<Object?> get props => [
+        alertId,
+        time,
+        creatorId,
+        active,
+        description,
+        title,
+        type,
+        images,
+        location
+      ];
 
   Alert copyWith({
     final String? alertId,
@@ -71,6 +86,7 @@ class Alert extends Equatable {
     final DateTime? time,
     final bool? active,
     final List<String>? images,
+    final LatLng? location,
   }) {
     return Alert(
       time: time ?? this.time,
@@ -81,6 +97,15 @@ class Alert extends Equatable {
       title: title ?? this.title,
       type: type ?? this.type,
       images: images ?? this.images,
+      location: location ?? this.location,
     );
   }
+}
+
+extension on GeoPoint {
+  LatLng toLatLng() => LatLng(latitude, longitude);
+}
+
+extension on LatLng {
+  GeoPoint toGeoPoint() => GeoPoint(latitude, longitude);
 }

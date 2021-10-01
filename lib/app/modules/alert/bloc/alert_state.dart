@@ -23,6 +23,7 @@ class CurrentAlertState extends AlertState {
         active: newAlert.active,
         description: newAlert.description ?? alert.description,
         title: newAlert.title ?? alert.title,
-        type: newAlert.type ?? alert.type));
+        type: newAlert.type ?? alert.type,
+        location: newAlert.location));
   }
 }
