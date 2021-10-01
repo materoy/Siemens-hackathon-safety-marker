@@ -14,6 +14,20 @@ class SignupCubit extends Cubit<SignupState> {
 
   final AuthenticationRepository _authenticationRepository;
 
+  void firstNameChanged(String value) {
+    emit(state.copyWith(
+        firstName: value,
+        status: Formz.validate(
+            [state.email, state.password, state.confirmPassword])));
+  }
+
+  void lastNameChanged(String value) {
+    emit(state.copyWith(
+        lastName: value,
+        status: Formz.validate(
+            [state.email, state.password, state.confirmPassword])));
+  }
+
   void emailChanged(String value) {
     final email = Email.dirty(value);
     emit(state.copyWith(
@@ -48,8 +62,8 @@ class SignupCubit extends Cubit<SignupState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       final mockUser = User(
-          firstName: 'firstName',
-          lastName: 'lastName',
+          firstName: state.firstName,
+          lastName: state.lastName,
           email: state.email.value,
           phone: 'phone');
       await _authenticationRepository.signup(
