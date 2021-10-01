@@ -22,7 +22,7 @@ class SafetyBloc extends Bloc<SafetyEvent, SafetyState> {
     if (alert != null) {
       /// Does not immediately raise alert for current user until
       /// alert metadata is set
-      if (alert.creatorId != user.uid) add(ActivateSafetyEvent(alert));
+      add(ActivateSafetyEvent(alert));
     } else {
       add(DeactivateSafetyEvent(Alert.empty));
     }
