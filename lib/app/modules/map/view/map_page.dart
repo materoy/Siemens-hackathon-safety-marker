@@ -28,28 +28,31 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> {
+  late final User user;
+  @override
+  void initState() {
+    super.initState();
+    user = context.read<AppBloc>().state.user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: BlocBuilder<MapBloc, MapState>(
-        buildWhen: (previous, current) {
-          return listEquals(
-              previous.markers?.toList(), current.markers?.toList());
-          // return previous.markers != current.markers;
-        },
         builder: (context, state) {
           if (state is! MapInitial && state.currentPosition != null) {
             final markers = state.markers ?? {};
-            final user = context.read<AppBloc>().state.user;
+
             if (state.currentPosition != null) {
               markers.add(Marker(
                   markerId: MarkerId(user.uid!),
                   position: state.currentPosition!,
                   flat: true,
                   icon: BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueOrange)));
+                      BitmapDescriptor.hueMagenta)));
             }
+
             return Stack(
               children: [
                 GoogleMap(
@@ -64,19 +67,21 @@ class _MapViewState extends State<MapView> {
                   indoorViewEnabled: true,
                   onMapCreated: context.read<MapBloc>().onMapCreated,
                 ),
-                Container(
-                    alignment: Alignment.bottomCenter,
-                    padding: EdgeInsets.only(bottom: SizeConfig.unitHeight * 4),
-                    child: OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xFFFFFFFF).withOpacity(.3),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: const BorderSide(
-                                    color: Colors.red, width: 2))),
-                        child: const Text("I'm Now Safe")))
+                if (!context.read<AppBloc>().state.user.safe)
+                  Container(
+                      alignment: Alignment.bottomCenter,
+                      padding:
+                          EdgeInsets.only(bottom: SizeConfig.unitHeight * 4),
+                      child: OutlinedButton(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                              backgroundColor:
+                                  const Color(0xFFFFFFFF).withOpacity(.3),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: const BorderSide(
+                                      color: Colors.red, width: 2))),
+                          child: const Text("I'm Now Safe")))
               ],
             );
           }
