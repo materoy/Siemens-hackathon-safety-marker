@@ -8,13 +8,11 @@ This project was built with flutter because of its multiplatform support capabil
 
 
 # Libraries
-## Development
 [Bloc](https://pub.dev/packages/bloc) : State management. \
 [Formz](https://pub.dev/packages/formz) : A unified form representation in Dart. \
 [Geolocator](https://pub.dev/packages/geolocator) : A Flutter geolocation plugin which provides easy access to platform specific location services. \
 [Cloud Firestore](https://pub.dev/packages/cloud_firestore) : A Flutter plugin to use the Cloud Firestore API. \
-[Firebase Storage](https://pub.dev/packages/firebase_storage) :
-Cloud sorage for flutter. \
+[Firebase Storage](https://pub.dev/packages/firebase_storage) : Cloud sorage for flutter. \
 [Firebase Messaging](https://pub.dev/packages/firebase_messaging) : Firebase messaging pugin for flutter. Used to deliver realtime notifications to the users. 
 ## Testing
 [Fake Cloud Firestore](https://pub.dev/packages/fake_cloud_firestore) : Fakes to write unit tests for Cloud Firestore. \
@@ -24,10 +22,12 @@ Cloud sorage for flutter. \
 
 
 # Screenshots
-||||||
-|:---:|:---:|:---:|:---:|:---:|
-|<img src="images/login.jpg" height=400px width=180px/>|<img src="images/createAccount.jpg" height=400px width=180px/>|<img src="images/raiseAlert.jpg" height=400px width=180px/>|<img src="images/reportDisaster.jpg" height=400px width=180px/>|<img src="images/userStatus.jpg" height=400px width=180px/>|
-|<img src="images/rescue.jpg" height=400px width=180px/>|<img src="images/userIsNotSafe.jpg" height=400px width=180px/>|<img src="images/userIsSafe.jpg" height=400px width=180px/>|<img src="images/rescentDisasters.jpg" height=400px width=180px/>|<img src="images/disasterDetails.jpg" height=400px width=180px/>|
+||||
+|:---:|:---:|:---:|
+|<img src="images/login.jpg" height=400px width=180px/>|<img src="images/createAccount.jpg" height=400px width=180px/>|<img src="images/raiseAlert.jpg" height=400px width=180px/>|
+|<img src="images/reportDisaster.jpg" height=400px width=180px/>|<img src="images/userStatus.jpg" height=400px width=180px/>|<img src="images/rescue.jpg" height=400px width=180px/>|
+|<img src="images/userIsNotSafe.jpg" height=400px width=180px/>|<img src="images/userIsSafe.jpg" height=400px width=180px/>|<img src="images/rescentDisasters.jpg" height=400px width=180px/>|
+|<img src="images/disasterDetails.jpg" height=400px width=180px/>|
 
 ---
 
