@@ -22,12 +22,11 @@ This project was built with flutter because of its multiplatform support capabil
 
 
 # Screenshots
-||||
-|:---:|:---:|:---:|
-|<img src="images/login.jpg" height=400px width=180px/>|<img src="images/createAccount.jpg" height=400px width=180px/>|<img src="images/raiseAlert.jpg" height=400px width=180px/>|
-|<img src="images/reportDisaster.jpg" height=400px width=180px/>|<img src="images/userStatus.jpg" height=400px width=180px/>|<img src="images/rescue.jpg" height=400px width=180px/>|
-|<img src="images/userIsNotSafe.jpg" height=400px width=180px/>|<img src="images/userIsSafe.jpg" height=400px width=180px/>|<img src="images/rescentDisasters.jpg" height=400px width=180px/>|
-|<img src="images/disasterDetails.jpg" height=400px width=180px/>|
+|||||
+|:---:|:---:|:---:|:---:|
+|<img src="images/login.jpg" height=400px width=180px/>|<img src="images/createAccount.jpg" height=400px width=180px/>|<img src="images/raiseAlert.jpg" height=400px width=180px/>|<img src="images/reportDisaster.jpg" height=400px width=180px/>|
+|<img src="images/userStatus.jpg" height=400px width=180px/>|<img src="images/rescue.jpg" height=400px width=180px/>|<img src="images/userIsNotSafe.jpg" height=400px width=180px/>|<img src="images/userIsSafe.jpg" height=400px width=180px/>|
+|<img src="images/rescentDisasters.jpg" height=400px width=180px/>|<img src="images/disasterDetails.jpg" height=400px width=180px/>|
 
 ---
 
